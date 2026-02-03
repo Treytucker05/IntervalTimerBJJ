@@ -430,9 +430,9 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW BJJ banner with clock overlay - 25% of screen height */}
+      {/* Header - VOW BJJ banner with clock overlay - 152px height */}
       <div
-        className="relative w-full h-[25vh] md:h-[25vh] landscape:h-[20vh] z-30 shrink-0"
+        className="relative w-full h-[152px] z-30 shrink-0"
         style={{
           backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
           backgroundSize: 'cover',
