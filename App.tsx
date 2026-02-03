@@ -430,9 +430,9 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW BJJ banner with clock overlay - TALLER */}
+      {/* Header - VOW BJJ banner with clock overlay - 25% of screen height */}
       <div
-        className="relative w-full h-16 md:h-20 landscape:h-12 z-30 shrink-0"
+        className="relative w-full h-[25vh] md:h-[25vh] landscape:h-[20vh] z-30 shrink-0"
         style={{
           backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
           backgroundSize: 'cover',
@@ -441,10 +441,10 @@ export default function App() {
       >
          {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
          <div className="absolute inset-0 flex items-center justify-center gap-3">
-            <span className="text-xl md:text-3xl landscape:text-base font-mono font-medium text-white/80 tracking-wide">
+            <span className="text-2xl md:text-4xl landscape:text-xl font-mono font-medium text-white/80 tracking-wide">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
-            <span className="text-sm md:text-base landscape:text-xs font-sans text-white/50 uppercase tracking-wider">
+            <span className="text-base md:text-lg landscape:text-sm font-sans text-white/50 uppercase tracking-wider">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
             </span>
          </div>
@@ -459,13 +459,13 @@ export default function App() {
              border-4 md:border-[6px] landscape:border-3 bg-black/50 rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* LEFT: Custom Logo (conditionally shown) */}
+            {/* LEFT: Custom Logo (conditionally shown) - starts lower, not full height */}
             {showLogos && (
-                <div className={`h-full flex items-center justify-center p-2 md:p-4 landscape:p-2 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
+                <div className={`self-end h-[75%] flex items-center justify-center p-2 md:p-4 landscape:p-2 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[40%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
                            <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
@@ -546,13 +546,13 @@ export default function App() {
                 </div>
             </div>
 
-            {/* RIGHT: Custom Logo (conditionally shown) */}
+            {/* RIGHT: Custom Logo (conditionally shown) - starts lower, not full height */}
             {showLogos && (
-                <div className={`h-full flex items-center justify-center p-2 md:p-4 landscape:p-2 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
+                <div className={`self-end h-[75%] flex items-center justify-center p-2 md:p-4 landscape:p-2 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[40%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
                            <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
