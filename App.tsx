@@ -438,47 +438,45 @@ export default function App() {
 
         {/* TIMER BOX - Logos on sides, timer centered */}
         <div className={`
-             relative w-full max-w-6xl h-full landscape:h-full grid grid-cols-[1fr_2fr_1fr]
+             relative w-full max-w-6xl h-full landscape:h-full flex items-stretch
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* LEFT: Logo box - centered in its column */}
-            <div className="flex items-center justify-center p-3 md:p-4 landscape:p-2">
+            {/* LEFT: Logo - centered between timer border and timer content */}
+            <div className="w-[20%] flex items-center justify-center p-2 md:p-4 landscape:p-2">
                 {customLogo ? (
-                    <img src={customLogo} alt="Custom Logo" className={`max-h-full max-w-full object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
+                    <img src={customLogo} alt="Custom Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
                 ) : (
-                    <div className={`w-full h-full max-w-[200px] max-h-[200px] md:max-w-[280px] md:max-h-[280px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
-                       <span className="text-xl md:text-3xl landscape:text-base text-center text-white/80 font-bold font-sans">LOGO</span>
-                    </div>
+                    <img src={`${import.meta.env.BASE_URL}vow-logo.jpg`} alt="VOW Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
                 )}
             </div>
 
-            {/* CENTER: Timer content */}
-            <div className="flex flex-col items-center justify-between py-3 md:py-4 landscape:py-2">
+            {/* CENTER: Timer content - takes remaining space */}
+            <div className="flex-1 flex flex-col items-center justify-center py-3 md:py-4 landscape:py-2">
                 {/* TOP: State Label */}
-                <div className="w-full text-center">
+                <div className="w-full text-center mb-2">
                     <h2 className="text-2xl md:text-5xl landscape:text-xl font-black tracking-[0.2em] animate-pulse opacity-90">
                         {getStateLabel()}
                     </h2>
                 </div>
 
-                {/* CENTER: Timer Display */}
+                {/* CENTER: Timer Display - truly centered */}
                 <div className="flex-1 flex flex-col items-center justify-center">
                     <div className={`
-                        font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center w-full
-                        ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[10rem] landscape:text-[18vh]' : 'text-[clamp(5rem,25vw,35vh)] landscape:text-[clamp(4rem,20vh,26vh)]'}
+                        font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center
+                        ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[10rem] landscape:text-[18vh]' : 'text-[clamp(5rem,20vw,30vh)] landscape:text-[clamp(4rem,18vh,24vh)]'}
                     `}>
                         {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                     </div>
 
-                    <div className="mt-1 landscape:mt-0 text-white/40 text-xs md:text-sm landscape:text-[10px] font-sans uppercase tracking-widest text-center">
+                    <div className="mt-2 landscape:mt-1 text-white/40 text-xs md:text-sm landscape:text-[10px] font-sans uppercase tracking-widest text-center">
                         {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` :
                          timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
                     </div>
                 </div>
 
                 {/* BOTTOM: Rounds (Left) + Controls (Right) */}
-                <div className="w-full flex items-center justify-between px-2">
+                <div className="w-full flex items-center justify-between px-2 mt-2">
                     {/* LEFT: Round Navigation */}
                     <div className="flex items-center gap-3 landscape:gap-2">
                         <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
@@ -527,14 +525,12 @@ export default function App() {
                 </div>
             </div>
 
-            {/* RIGHT: Logo box (mirrored) - centered in its column */}
-            <div className="flex items-center justify-center p-3 md:p-4 landscape:p-2">
+            {/* RIGHT: Logo - centered between timer content and timer border */}
+            <div className="w-[20%] flex items-center justify-center p-2 md:p-4 landscape:p-2">
                 {customLogo ? (
-                    <img src={customLogo} alt="Custom Logo" className={`max-h-full max-w-full object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                    <img src={customLogo} alt="Custom Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                 ) : (
-                    <div className={`w-full h-full max-w-[200px] max-h-[200px] md:max-w-[280px] md:max-h-[280px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
-                       <span className="text-xl md:text-3xl landscape:text-base text-center text-white/80 font-bold font-sans">LOGO</span>
-                    </div>
+                    <img src={`${import.meta.env.BASE_URL}bjj-logo.jpg`} alt="BJJ Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
                 )}
             </div>
         </div>
