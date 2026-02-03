@@ -435,8 +435,9 @@ export default function App() {
         className="relative w-full h-[130px] z-30 shrink-0"
         style={{
           backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
          {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
