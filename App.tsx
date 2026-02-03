@@ -382,8 +382,8 @@ export default function App() {
         
         {/* TIMER BOX - Centered, Large with colored borders/text */}
         <div className={`
-             relative w-full max-w-5xl aspect-video md:aspect-[2/1] landscape:aspect-auto landscape:h-[70vh] flex flex-col items-center justify-center
-             border-[6px] md:border-[12px] bg-black/40 backdrop-blur-sm rounded-3xl
+             relative w-full max-w-5xl aspect-video md:aspect-[2/1] landscape:aspect-auto landscape:h-[55vh] landscape:max-h-[55vh] flex flex-col items-center justify-center
+             border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
             <h2 className="text-2xl md:text-5xl landscape:text-4xl font-black tracking-[0.2em] mb-0 landscape:mb-2 animate-pulse text-center opacity-90">
@@ -407,44 +407,44 @@ export default function App() {
       </div>
 
       {/* FOOTER - Rounds and Controls */}
-      <div className="z-10 w-full p-4 md:p-6 bg-black/40 backdrop-blur-md border-t border-white/5 grid grid-cols-2 items-center">
+      <div className="z-10 w-full p-4 md:p-6 landscape:p-2 landscape:py-1 bg-black/40 backdrop-blur-md border-t border-white/5 grid grid-cols-2 items-center shrink-0">
             
             {/* LEFT: Rounds */}
-            <div className="flex items-center justify-start gap-4">
-                 <button onClick={() => changePhase(-1)} className="p-3 hover:bg-white/10 rounded-full transition-colors group">
-                    <ChevronLeft size={24} className="md:w-8 md:h-8 text-white/50 group-hover:text-white transition-all" />
+            <div className="flex items-center justify-start gap-4 landscape:gap-2">
+                 <button onClick={() => changePhase(-1)} className="p-3 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
+                    <ChevronLeft size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
                  </button>
-                 
+
                  <div className="flex flex-col md:flex-row md:items-baseline gap-0 md:gap-3">
-                    <span className="text-xs md:text-xl font-bold text-white/50 uppercase font-sans tracking-widest">
+                    <span className="text-xs md:text-xl landscape:text-[10px] font-bold text-white/50 uppercase font-sans tracking-widest">
                         Round
                     </span>
-                    <span className="text-3xl md:text-5xl font-black font-mono text-white">
-                        {currentRound}<span className="text-xl md:text-3xl text-white/30">/{config.rounds}</span>
+                    <span className="text-3xl md:text-5xl landscape:text-2xl font-black font-mono text-white">
+                        {currentRound}<span className="text-xl md:text-3xl landscape:text-lg text-white/30">/{config.rounds}</span>
                     </span>
                  </div>
 
-                 <button onClick={() => changePhase(1)} className="p-3 hover:bg-white/10 rounded-full transition-colors group">
-                    <ChevronRight size={24} className="md:w-8 md:h-8 text-white/50 group-hover:text-white transition-all" />
+                 <button onClick={() => changePhase(1)} className="p-3 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
+                    <ChevronRight size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
                  </button>
             </div>
 
             {/* RIGHT: Controls */}
-            <div className="flex items-center justify-end gap-4 md:gap-8">
+            <div className="flex items-center justify-end gap-4 md:gap-8 landscape:gap-3">
                 {timerState !== TimerState.FINISHED && (
-                <button 
+                <button
                     onClick={toggleTimer}
-                    className="group flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white text-black hover:scale-105 transition-transform shadow-lg shadow-white/10"
+                    className="group flex items-center justify-center w-16 h-16 md:w-20 md:h-20 landscape:w-12 landscape:h-12 rounded-full bg-white text-black hover:scale-105 transition-transform shadow-lg shadow-white/10"
                 >
-                    {isRunning ? <Pause size={28} className="md:w-8 md:h-8" fill="black" /> : <Play size={28} className="md:w-8 md:h-8 ml-1" fill="black" />}
+                    {isRunning ? <Pause size={28} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" fill="black" /> : <Play size={28} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 ml-1" fill="black" />}
                 </button>
                 )}
-                
-                <button 
+
+                <button
                     onClick={resetTimer}
-                    className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                    className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 landscape:w-12 landscape:h-12 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
                 >
-                    <RotateCcw size={24} className="md:w-8 md:h-8" />
+                    <RotateCcw size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" />
                 </button>
             </div>
       </div>
