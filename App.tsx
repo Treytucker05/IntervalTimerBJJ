@@ -430,16 +430,18 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW BJJ banner with clock overlay - image dictates height */}
-      <div className="relative w-full z-30 shrink-0">
-        <img
-          src={`${import.meta.env.BASE_URL}vow-header.png`}
-          alt="VOW BJJ Header"
-          className="w-full h-auto"
-        />
+      {/* Header - VOW BJJ banner with clock overlay */}
+      <div
+        className="relative w-full h-16 md:h-20 landscape:h-12 z-30 shrink-0"
+        style={{
+          backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
         <div className="absolute inset-0 flex items-center justify-center gap-3">
-          <span className="text-lg md:text-2xl landscape:text-base font-mono font-medium text-white/80 tracking-wide">
+          <span className="text-lg md:text-2xl landscape:text-sm font-mono font-medium text-white/80 tracking-wide">
             {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
           <span className="text-xs md:text-sm landscape:text-[10px] font-sans text-white/50 uppercase tracking-wider">
