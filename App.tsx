@@ -410,26 +410,23 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - Thin status strip with demoted clock */}
-      <div className="w-full px-4 py-2 md:py-3 grid grid-cols-3 items-center z-30 shrink-0 landscape:py-1 landscape:px-4 bg-[#0a0a0a] border-b border-white/10">
-         {/* LEFT: VOW - flat style matching UI */}
-         <div className="flex items-center justify-start">
-            <img src={`${import.meta.env.BASE_URL}vow-logo.jpg`} alt="VOW" className="h-8 md:h-10 landscape:h-6 w-auto object-contain rounded opacity-80 hover:opacity-100 transition-opacity" />
-         </div>
-
-         {/* CENTER: Clock - demoted to neutral gray */}
-         <div className="flex items-center justify-center gap-3">
-            <span className="text-lg md:text-2xl landscape:text-sm font-mono font-medium text-white/60 tracking-wide">
+      {/* Header - VOW BJJ banner with clock overlay */}
+      <div
+        className="relative w-full h-12 md:h-16 landscape:h-10 z-30 shrink-0"
+        style={{
+          backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+         {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
+         <div className="absolute inset-0 flex items-center justify-center gap-3">
+            <span className="text-lg md:text-2xl landscape:text-sm font-mono font-medium text-white/80 tracking-wide">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
-            <span className="text-xs md:text-sm landscape:text-[10px] font-sans text-white/40 uppercase tracking-wider">
+            <span className="text-xs md:text-sm landscape:text-[10px] font-sans text-white/50 uppercase tracking-wider">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
             </span>
-         </div>
-
-         {/* RIGHT: BJJ - flat style matching UI */}
-         <div className="flex items-center justify-end">
-            <img src={`${import.meta.env.BASE_URL}bjj-logo.jpg`} alt="BJJ" className="h-8 md:h-10 landscape:h-6 w-auto object-contain rounded opacity-80 hover:opacity-100 transition-opacity" />
          </div>
       </div>
 
