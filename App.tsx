@@ -343,7 +343,7 @@ export default function App() {
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
       {/* Header / Logo Area */}
-      <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-10 shrink-0 landscape:py-2">
+      <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-20 shrink-0 landscape:py-1 landscape:px-4 bg-[#121212]">
          {/* LEFT: Logo */}
          <div className="flex flex-col gap-2 items-start">
             {customLogo ? (
@@ -378,11 +378,11 @@ export default function App() {
       </div>
 
       {/* MAIN CONTENT AREA - Timer takes mostly everything */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 min-h-0">
-        
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 min-h-0 overflow-hidden">
+
         {/* TIMER BOX - Centered, Large with colored borders/text */}
         <div className={`
-             relative w-full max-w-5xl aspect-video md:aspect-[2/1] landscape:aspect-auto landscape:h-[55vh] landscape:max-h-[55vh] flex flex-col items-center justify-center
+             relative w-full max-w-5xl aspect-video md:aspect-[2/1] landscape:aspect-[3/1] landscape:w-[90%] landscape:max-h-full flex flex-col items-center justify-center
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
@@ -407,7 +407,7 @@ export default function App() {
       </div>
 
       {/* FOOTER - Rounds and Controls */}
-      <div className="z-10 w-full p-4 md:p-6 landscape:p-2 landscape:py-1 bg-black/40 backdrop-blur-md border-t border-white/5 grid grid-cols-2 items-center shrink-0">
+      <div className="z-20 w-full p-4 md:p-6 landscape:p-2 landscape:py-2 bg-[#121212] border-t border-white/5 grid grid-cols-2 items-center shrink-0">
             
             {/* LEFT: Rounds */}
             <div className="flex items-center justify-start gap-4 landscape:gap-2">
