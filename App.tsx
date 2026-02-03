@@ -347,10 +347,10 @@ export default function App() {
          {/* LEFT: Logo */}
          <div className="flex flex-col gap-2 items-start">
             {customLogo ? (
-                <img src={customLogo} alt="VOW BJJ" className="h-12 md:h-24 landscape:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
+                <img src={customLogo} alt="VOW BJJ" className="h-12 md:h-24 landscape:h-8 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
             ) : (
-                <div className="h-12 w-12 md:h-24 md:w-24 landscape:h-14 landscape:w-14 border-3 border-amber-400/60 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
-                   <span className="text-[10px] md:text-sm text-center text-amber-400/80 font-bold font-sans">LOGO</span>
+                <div className="h-12 w-12 md:h-24 md:w-24 landscape:h-8 landscape:w-8 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
+                   <span className="text-[10px] md:text-sm landscape:text-[6px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
                 </div>
             )}
             <h1 className="text-sm md:text-2xl font-bold tracking-widest text-amber-400 font-mono hidden md:block landscape:hidden drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">V.O.W. JJ</h1>
@@ -358,10 +358,10 @@ export default function App() {
 
          {/* CENTER: Clock - Responsive Sizing */}
          <div className="flex flex-col items-center justify-center">
-            <div className="text-5xl md:text-8xl landscape:text-4xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
+            <div className="text-5xl md:text-8xl landscape:text-2xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
-            <div className="text-sm md:text-2xl landscape:text-sm font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-2">
+            <div className="text-sm md:text-2xl landscape:text-[10px] font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-2 landscape:mt-0">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
             </div>
          </div>
@@ -378,11 +378,11 @@ export default function App() {
       </div>
 
       {/* MAIN CONTENT AREA - Timer takes mostly everything */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 min-h-0 overflow-hidden">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 landscape:px-8 min-h-0 py-2 landscape:py-1">
 
         {/* TIMER BOX - Centered, Large with colored borders/text */}
         <div className={`
-             relative w-full max-w-5xl aspect-video md:aspect-[2/1] landscape:aspect-[3/1] landscape:w-[90%] landscape:max-h-full flex flex-col items-center justify-center
+             relative w-full max-w-5xl h-full landscape:h-full aspect-video md:aspect-[2/1] landscape:!aspect-auto flex flex-col items-center justify-center
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
