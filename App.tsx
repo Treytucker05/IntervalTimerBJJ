@@ -460,14 +460,14 @@ export default function App() {
              border-4 md:border-[6px] landscape:border-3 bg-black/50 rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* LEFT: Custom Logo (conditionally shown) - starts lower, not full height */}
+            {/* LEFT: Custom Logo (conditionally shown) */}
             {showLogos && (
-                <div className={`self-end h-[75%] flex items-center justify-center p-2 md:p-4 landscape:p-2 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
+                <div className={`h-full flex items-center justify-center p-3 md:p-4 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] w-16 md:w-28 object-contain border-2 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
+                        <div className={`w-16 md:w-24 aspect-square border-2 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                           <span className="text-xs md:text-base text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
                 </div>
@@ -547,14 +547,14 @@ export default function App() {
                 </div>
             </div>
 
-            {/* RIGHT: Custom Logo (conditionally shown) - starts lower, not full height */}
+            {/* RIGHT: Custom Logo (conditionally shown) */}
             {showLogos && (
-                <div className={`self-end h-[75%] flex items-center justify-center p-2 md:p-4 landscape:p-2 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
+                <div className={`h-full flex items-center justify-center p-3 md:p-4 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] w-16 md:w-28 object-contain border-2 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
+                        <div className={`w-16 md:w-24 aspect-square border-2 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                           <span className="text-xs md:text-base text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
                 </div>
