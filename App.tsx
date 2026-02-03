@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { TimerState, TimerConfig, DEFAULT_CONFIG, ROLL_CONFIG, HIIT_CONFIG, AlertSetting, SoundType } from './types';
 import { audioService } from './services/audioService';
-import { generateThemedBackground } from './services/geminiService';
 import { 
     Play, Pause, RotateCcw, Save, Settings as SettingsIcon, 
     Image as ImageIcon, Check, ChevronLeft, ChevronRight, 
@@ -85,8 +84,6 @@ export default function App() {
   // UI State
   const [showSettings, setShowSettings] = useState(false);
   const [customLogo, setCustomLogo] = useState<string | null>(null);
-  const [bgImage, setBgImage] = useState<string | null>(null);
-  const [isGeneratingBg, setIsGeneratingBg] = useState(false);
 
   // Refs for accurate timing
   const timerRef = useRef<number | null>(null);
@@ -116,7 +113,6 @@ export default function App() {
     switch (newState) {
       case TimerState.WARMUP:
         newTime = config.warmupDuration;
-        setBgImage(null);
         break;
       case TimerState.WORK:
         newTime = config.workDuration;
@@ -309,14 +305,6 @@ export default function App() {
       });
   };
 
-  // --- AI Theme ---
-  const handleGenerateTheme = async () => {
-    setIsGeneratingBg(true);
-    const bg = await generateThemedBackground("Geometric Wolf, Aggressive, Focus, Black Belt, Martial Arts");
-    if (bg) setBgImage(bg);
-    setIsGeneratingBg(false);
-  };
-
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -353,13 +341,6 @@ export default function App() {
 
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
-      
-      {bgImage && (
-        <div 
-          className="absolute inset-0 z-0 opacity-40 bg-cover bg-center"
-          style={{ backgroundImage: `url(${bgImage})` }}
-        />
-      )}
 
       {/* Header / Logo Area */}
       <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-10 shrink-0 landscape:py-2">
@@ -629,25 +610,6 @@ export default function App() {
                                 <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
                             </label>
 
-                            <button 
-                                onClick={handleGenerateTheme}
-                                disabled={isGeneratingBg}
-                                className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-900 to-blue-900 rounded-lg hover:brightness-110 transition disabled:opacity-50 text-left"
-                            >
-                                <div className="p-2 bg-white/20 rounded-full">
-                                   {isGeneratingBg ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"/> : <div className="text-xl">🍌</div>}
-                                </div>
-                                <div className="flex-1">
-                                    <div className="font-bold flex items-center gap-2">
-                                        Generate AI Theme
-                                        <span className="text-[10px] bg-white/20 px-1 rounded">GEMINI</span>
-                                    </div>
-                                    <div className="text-xs text-white/70">Create a unique "VOW" geometric background</div>
-                                </div>
-                            </button>
-                            {bgImage && (
-                                <button onClick={() => setBgImage(null)} className="text-xs text-red-400 underline self-start">Clear Background</button>
-                            )}
                         </div>
                     </div>
                 </div>
