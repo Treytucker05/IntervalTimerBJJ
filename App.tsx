@@ -454,12 +454,12 @@ export default function App() {
           backgroundPosition: 'center',
         }}
       >
-        {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-mono font-bold text-white/90 tracking-wide" style={{ fontSize: 'clamp(28px, 5vw, 56px)' }}>
+        {/* CENTER: Clock overlay - time stacked over date */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center leading-tight">
+          <span className="font-mono font-bold text-white tracking-wide" style={{ fontSize: 'clamp(36px, 7vw, 72px)' }}>
             {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
-          <span className="font-sans text-white/50 uppercase tracking-wider" style={{ fontSize: 'clamp(10px, 1.5vw, 16px)' }}>
+          <span className="font-sans text-white/60 uppercase tracking-widest" style={{ fontSize: 'clamp(14px, 2.5vw, 24px)' }}>
             {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
           </span>
         </div>
