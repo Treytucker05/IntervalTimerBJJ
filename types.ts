@@ -6,7 +6,7 @@ export enum TimerState {
   FINISHED = 'FINISHED'
 }
 
-export type SoundType = 'beep' | 'buzzer' | 'bell' | 'horn' | 'gong' | 'none';
+export type SoundType = 'beep' | 'buzzer' | 'bell' | 'horn' | 'gong' | 'boxing_bell' | 'fight' | 'rumble' | 'none';
 
 export interface AlertSetting {
   sound: SoundType;
@@ -32,10 +32,10 @@ export interface TimerConfig {
 }
 
 const DEFAULT_ALERTS = {
-  startRound: { sound: 'horn' as SoundType, vibrate: true },
-  endRound: { sound: 'buzzer' as SoundType, vibrate: true },
+  startRound: { sound: 'fight' as SoundType, vibrate: true },
+  endRound: { sound: 'boxing_bell' as SoundType, vibrate: true },
   startRest: { sound: 'none' as SoundType, vibrate: false },
-  endRest: { sound: 'beep' as SoundType, vibrate: false },
+  endRest: { sound: 'rumble' as SoundType, vibrate: false },
 };
 
 export const DEFAULT_CONFIG: TimerConfig = {

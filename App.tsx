@@ -344,16 +344,16 @@ export default function App() {
 
       {/* Header / Logo Area - Stays OUTSIDE timer box */}
       <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-20 shrink-0 landscape:py-2 landscape:px-4 bg-[#121212]">
-         {/* LEFT: Logo - Bigger in landscape */}
-         <div className="flex flex-col gap-2 items-start">
+         {/* LEFT: Logo + VOW */}
+         <div className="flex items-center gap-2 md:gap-4">
             {customLogo ? (
-                <img src={customLogo} alt="VOW BJJ" className="h-12 md:h-24 landscape:h-12 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
+                <img src={customLogo} alt="VOW BJJ" className="h-16 md:h-20 landscape:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
             ) : (
-                <div className="h-12 w-12 md:h-24 md:w-24 landscape:h-12 landscape:w-12 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
+                <div className="h-16 w-16 md:h-20 md:w-20 landscape:h-14 landscape:w-14 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
                    <span className="text-[10px] md:text-sm landscape:text-[8px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
                 </div>
             )}
-            <h1 className="text-sm md:text-2xl font-bold tracking-widest text-amber-400 font-mono hidden md:block landscape:hidden drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">V.O.W. JJ</h1>
+            <span className="text-xl md:text-3xl landscape:text-lg font-black tracking-widest text-amber-400 font-mono drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">VOW</span>
          </div>
 
          {/* CENTER: Clock - Responsive Sizing */}
@@ -366,14 +366,16 @@ export default function App() {
             </div>
          </div>
 
-         {/* RIGHT: Settings */}
-         <div className="flex justify-end">
-             <button
-                onClick={() => setShowSettings(!showSettings)}
-                className="p-2 md:p-3 landscape:p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white transition-all"
-             >
-                <SettingsIcon size={20} className="md:w-6 md:h-6 landscape:w-5 landscape:h-5" />
-             </button>
+         {/* RIGHT: BJJ + Logo (mirrored) */}
+         <div className="flex items-center justify-end gap-2 md:gap-4">
+            <span className="text-xl md:text-3xl landscape:text-lg font-black tracking-widest text-amber-400 font-mono drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">BJJ</span>
+            {customLogo ? (
+                <img src={customLogo} alt="VOW BJJ" className="h-16 md:h-20 landscape:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-x-[-1]" />
+            ) : (
+                <div className="h-16 w-16 md:h-20 md:w-20 landscape:h-14 landscape:w-14 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
+                   <span className="text-[10px] md:text-sm landscape:text-[8px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
+                </div>
+            )}
          </div>
       </div>
 
@@ -430,14 +432,22 @@ export default function App() {
                     </button>
                 </div>
 
-                {/* RIGHT: Play/Pause + Reset Controls */}
+                {/* RIGHT: Settings + Play/Pause + Reset Controls */}
                 <div className="flex items-center gap-3 landscape:gap-2">
+                    {/* Settings Button (moved from header) */}
+                    <button
+                        onClick={() => setShowSettings(!showSettings)}
+                        className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                    >
+                        <SettingsIcon size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                    </button>
+
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
-                        className="group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white text-black hover:scale-105 transition-transform shadow-lg shadow-white/10"
+                        className={`group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full hover:scale-105 transition-transform shadow-lg ${isRunning ? 'bg-red-500 text-white shadow-red-500/20' : 'bg-green-500 text-white shadow-green-500/20'}`}
                     >
-                        {isRunning ? <Pause size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5" fill="black" /> : <Play size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 ml-0.5" fill="black" />}
+                        {isRunning ? <Pause size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5" fill="white" /> : <Play size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 ml-0.5" fill="white" />}
                     </button>
                     )}
 
@@ -558,12 +568,15 @@ export default function App() {
                                 <div key={item.key} className="grid grid-cols-[1fr_auto_auto] gap-4 items-center">
                                     <span className="text-sm font-bold text-white/80">{item.label}</span>
                                     
-                                    <select 
+                                    <select
                                         value={config.alerts[item.key as keyof typeof config.alerts].sound}
                                         onChange={(e) => updateAlert(item.key as any, 'sound', e.target.value)}
                                         className="bg-white/5 border border-white/20 rounded px-2 py-1 text-sm outline-none"
                                     >
                                         <option value="none">None</option>
+                                        <option value="boxing_bell">🥊 Boxing Bell</option>
+                                        <option value="fight">🔥 FIGHT!</option>
+                                        <option value="rumble">💪 Rumble</option>
                                         <option value="horn">Horn</option>
                                         <option value="bell">Bell</option>
                                         <option value="gong">Gong</option>
