@@ -345,23 +345,23 @@ export default function App() {
       {/* Header / Logo Area */}
       <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-10 shrink-0 landscape:py-2">
          {/* LEFT: Logo */}
-         <div className="flex flex-col gap-1 items-start">
+         <div className="flex flex-col gap-2 items-start">
             {customLogo ? (
-                <img src={customLogo} alt="VOW BJJ" className="h-8 md:h-16 landscape:h-10 w-auto object-contain" />
+                <img src={customLogo} alt="VOW BJJ" className="h-12 md:h-24 landscape:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
             ) : (
-                <div className="h-8 w-8 md:h-16 md:w-16 landscape:h-10 landscape:w-10 border-2 border-white/20 flex items-center justify-center rounded-lg bg-black/40 backdrop-blur-sm">
-                   <span className="text-[8px] md:text-[10px] text-center text-white/50 font-sans">LOGO</span>
+                <div className="h-12 w-12 md:h-24 md:w-24 landscape:h-14 landscape:w-14 border-3 border-amber-400/60 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
+                   <span className="text-[10px] md:text-sm text-center text-amber-400/80 font-bold font-sans">LOGO</span>
                 </div>
             )}
-            <h1 className="text-xs md:text-xl font-bold tracking-widest text-white/80 font-mono hidden md:block landscape:hidden">V.O.W. JJ</h1>
+            <h1 className="text-sm md:text-2xl font-bold tracking-widest text-amber-400 font-mono hidden md:block landscape:hidden drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">V.O.W. JJ</h1>
          </div>
 
          {/* CENTER: Clock - Responsive Sizing */}
          <div className="flex flex-col items-center justify-center">
-            <div className="text-3xl md:text-6xl landscape:text-3xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <div className="text-5xl md:text-8xl landscape:text-4xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
-            <div className="text-[10px] md:text-lg landscape:text-xs font-bold font-sans text-amber-200/80 uppercase tracking-[0.2em] mt-1">
+            <div className="text-sm md:text-2xl landscape:text-sm font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-2">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
             </div>
          </div>
