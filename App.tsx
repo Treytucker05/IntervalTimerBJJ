@@ -492,10 +492,10 @@ export default function App() {
                 </div>
             </div>
 
-            {/* BOTTOM: Controls bar - spans full width */}
-            <div className="w-full flex items-center justify-between px-4 md:px-6 py-3 md:py-4 landscape:py-2 landscape:px-3">
-                {/* LEFT: Round Navigation */}
-                <div className="flex items-center gap-3 landscape:gap-2">
+            {/* BOTTOM: Controls bar - spans full width, split into two halves */}
+            <div className="w-full grid grid-cols-2 py-3 md:py-4 landscape:py-2">
+                {/* LEFT HALF: Round Navigation - centered in left half */}
+                <div className="flex items-center justify-center gap-3 landscape:gap-2">
                     <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
                         <ChevronLeft size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
                     </button>
@@ -514,8 +514,8 @@ export default function App() {
                     </button>
                 </div>
 
-                {/* RIGHT: Settings + Play/Pause + Reset Controls */}
-                <div className="flex items-center gap-3 md:gap-5 landscape:gap-2">
+                {/* RIGHT HALF: Settings + Play/Pause + Reset Controls - centered in right half */}
+                <div className="flex items-center justify-center gap-3 md:gap-5 landscape:gap-2">
                     <button
                         onClick={() => setShowSettings(!showSettings)}
                         className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
