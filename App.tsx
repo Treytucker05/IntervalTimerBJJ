@@ -410,133 +410,134 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW (left), Clock (center), BJJ (right) - spread out */}
-      <div className="w-full p-2 md:p-4 grid grid-cols-3 items-center z-30 shrink-0 landscape:py-2 landscape:px-4 bg-[#121212]">
-         {/* LEFT: VOW centered in its column */}
-         <div className="flex items-center justify-center">
-            <img src={`${import.meta.env.BASE_URL}vow-logo.jpg`} alt="VOW" className="h-16 md:h-24 landscape:h-12 w-auto object-contain rounded-lg drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
+      {/* Header - Thin status strip with demoted clock */}
+      <div className="w-full px-4 py-2 md:py-3 grid grid-cols-3 items-center z-30 shrink-0 landscape:py-1 landscape:px-4 bg-[#0a0a0a] border-b border-white/10">
+         {/* LEFT: VOW - flat style matching UI */}
+         <div className="flex items-center justify-start">
+            <img src={`${import.meta.env.BASE_URL}vow-logo.jpg`} alt="VOW" className="h-8 md:h-10 landscape:h-6 w-auto object-contain rounded opacity-80 hover:opacity-100 transition-opacity" />
          </div>
 
-         {/* CENTER: Clock */}
-         <div className="flex flex-col items-center justify-center">
-            <div className="text-6xl md:text-8xl landscape:text-2xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
+         {/* CENTER: Clock - demoted to neutral gray */}
+         <div className="flex items-center justify-center gap-3">
+            <span className="text-lg md:text-2xl landscape:text-sm font-mono font-medium text-white/60 tracking-wide">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </div>
-            <div className="text-base md:text-2xl landscape:text-xs font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-1 landscape:mt-0">
+            </span>
+            <span className="text-xs md:text-sm landscape:text-[10px] font-sans text-white/40 uppercase tracking-wider">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
-            </div>
+            </span>
          </div>
 
-         {/* RIGHT: BJJ centered in its column */}
-         <div className="flex items-center justify-center">
-            <img src={`${import.meta.env.BASE_URL}bjj-logo.jpg`} alt="BJJ" className="h-16 md:h-24 landscape:h-12 w-auto object-contain rounded-lg drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
+         {/* RIGHT: BJJ - flat style matching UI */}
+         <div className="flex items-center justify-end">
+            <img src={`${import.meta.env.BASE_URL}bjj-logo.jpg`} alt="BJJ" className="h-8 md:h-10 landscape:h-6 w-auto object-contain rounded opacity-80 hover:opacity-100 transition-opacity" />
          </div>
       </div>
 
       {/* MAIN CONTENT AREA - Timer box fills remaining space */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 landscape:px-4 min-h-0 py-2 landscape:py-1">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-3 md:px-4 landscape:px-3 min-h-0 py-2 landscape:py-1">
 
-        {/* TIMER BOX - Logos on sides, timer centered */}
+        {/* TIMER BOX - Clean single border, consistent 16px radius */}
         <div className={`
-             relative w-full max-w-6xl h-full landscape:h-full flex flex-col
-             border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
+             relative w-full max-w-5xl h-full landscape:h-full flex flex-col
+             border-4 md:border-[6px] landscape:border-3 bg-black/50 rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* TOP SECTION: Logos + Timer using CSS Grid for precise centering */}
-            <div className={`flex-1 grid grid-cols-[1fr_auto_1fr] items-center border-b-4 md:border-b-[6px] transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
-                {/* LEFT: Custom Logo - centered in space between outer border and timer */}
-                <div className="h-full flex items-center justify-center p-2 md:p-4 landscape:p-2">
+            {/* TOP SECTION: Logos + Timer */}
+            <div className={`flex-1 grid grid-cols-[1fr_auto_1fr] items-center border-b-2 md:border-b-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
+                {/* LEFT: Custom Logo - smaller, less dominant */}
+                <div className="h-full flex items-center justify-center p-2 md:p-3 landscape:p-2">
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[80%] max-w-[80%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[70%] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[60%] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/60 font-bold font-sans">LOGO</span>
+                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                           <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
                 </div>
 
-                {/* CENTER: Timer content - auto width based on content */}
-                <div className="flex flex-col items-center justify-center py-3 md:py-4 landscape:py-2 px-4 md:px-8">
-                    {/* TOP: State Label */}
-                    <div className="w-full text-center mb-2">
-                        <h2 className="text-2xl md:text-5xl landscape:text-xl font-black tracking-[0.2em] animate-pulse opacity-90">
-                            {getStateLabel()}
-                        </h2>
+                {/* CENTER: Timer content - DOMINANT element */}
+                <div className="flex flex-col items-center justify-center py-2 md:py-3 landscape:py-1 px-6 md:px-12">
+                    {/* State Label - tighter gap, better contrast */}
+                    <h2 className="text-xl md:text-3xl landscape:text-base font-bold tracking-[0.15em] text-white/80 mb-1">
+                        {getStateLabel()}
+                    </h2>
+
+                    {/* Timer Display - 20% larger, dominant */}
+                    <div className={`
+                        font-mono leading-none tracking-tight tabular-nums text-center
+                        ${timerState === TimerState.FINISHED ? 'text-[14vw] md:text-[12rem] landscape:text-[20vh]' : 'text-[clamp(6rem,26vw,38vh)] landscape:text-[clamp(5rem,24vh,32vh)]'}
+                    `}>
+                        {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                     </div>
 
-                    {/* CENTER: Timer Display - truly centered */}
-                    <div className="flex-1 flex flex-col items-center justify-center">
-                        <div className={`
-                            font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center
-                            ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[10rem] landscape:text-[18vh]' : 'text-[clamp(5rem,20vw,30vh)] landscape:text-[clamp(4rem,18vh,24vh)]'}
-                        `}>
-                            {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
-                        </div>
-
-                        <div className="mt-2 landscape:mt-1 text-white/40 text-xs md:text-sm landscape:text-[10px] font-sans uppercase tracking-widest text-center">
-                            {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` :
-                             timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
-                        </div>
+                    {/* Secondary info - better contrast, more gap from timer */}
+                    <div className="mt-3 landscape:mt-2 text-white/60 text-sm md:text-base landscape:text-xs font-medium font-sans uppercase tracking-wider text-center">
+                        {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` :
+                         timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
                     </div>
                 </div>
 
-                {/* RIGHT: Custom Logo - centered in space between timer and outer border */}
-                <div className="h-full flex items-center justify-center p-2 md:p-4 landscape:p-2">
+                {/* RIGHT: Custom Logo - smaller, less dominant */}
+                <div className="h-full flex items-center justify-center p-2 md:p-3 landscape:p-2">
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[80%] max-w-[80%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[70%] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[60%] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/60 font-bold font-sans">LOGO</span>
+                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                           <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* BOTTOM: Controls bar - spans full width, split into two halves */}
-            <div className="w-full grid grid-cols-2 py-3 md:py-4 landscape:py-2">
-                {/* LEFT HALF: Round Navigation - centered in left half */}
-                <div className="flex items-center justify-center gap-3 landscape:gap-2">
-                    <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                        <ChevronLeft size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+            {/* BOTTOM: Controls bar - reduced height (~25% smaller) */}
+            <div className="w-full grid grid-cols-2 py-2 md:py-3 landscape:py-1">
+                {/* LEFT HALF: Round Navigation - balanced typography */}
+                <div className="flex items-center justify-center gap-2 landscape:gap-1">
+                    <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-lg transition-colors group">
+                        <ChevronLeft size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white/50 group-hover:text-white transition-all" />
                     </button>
 
-                    <div className="flex items-baseline gap-3 md:gap-4">
-                        <span className="text-sm md:text-lg landscape:text-xs font-black text-white/50 uppercase font-sans tracking-[0.3em]">
+                    {/* Fixed ROUND typography - unified scale */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-base md:text-xl landscape:text-sm font-bold text-white/70 uppercase font-sans tracking-wider">
                             Round
                         </span>
-                        <span className="text-3xl md:text-5xl landscape:text-2xl font-black font-mono text-white">
-                            {currentRound}<span className="text-xl md:text-3xl landscape:text-lg text-white/30 ml-1">/{config.rounds}</span>
+                        <span className="text-2xl md:text-4xl landscape:text-xl font-bold font-mono text-white">
+                            {currentRound}
+                        </span>
+                        <span className="text-lg md:text-2xl landscape:text-base font-bold font-mono text-white/40">
+                            / {config.rounds}
                         </span>
                     </div>
 
-                    <button onClick={() => changePhase(1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                        <ChevronRight size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                    <button onClick={() => changePhase(1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-lg transition-colors group">
+                        <ChevronRight size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white/50 group-hover:text-white transition-all" />
                     </button>
                 </div>
 
-                {/* RIGHT HALF: Settings + Play/Pause + Reset Controls - centered in right half */}
-                <div className="flex items-center justify-center gap-3 md:gap-5 landscape:gap-2">
+                {/* RIGHT HALF: Controls - consistent sizing, reduced glow */}
+                <div className="flex items-center justify-center gap-4 md:gap-6 landscape:gap-3">
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-9 landscape:h-9 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
-                        <SettingsIcon size={20} className="md:w-6 md:h-6 landscape:w-5 landscape:h-5" />
+                        <SettingsIcon size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
                     </button>
 
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
-                        className={`group flex items-center justify-center w-16 h-16 md:w-24 md:h-24 landscape:w-12 landscape:h-12 rounded-full hover:scale-105 transition-transform shadow-lg ${isRunning ? 'bg-red-500 text-white shadow-red-500/30' : 'bg-green-500 text-white shadow-green-500/30'}`}
+                        className={`flex items-center justify-center w-14 h-14 md:w-20 md:h-20 landscape:w-11 landscape:h-11 rounded-xl hover:scale-105 transition-transform ${isRunning ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
                     >
-                        {isRunning ? <Pause size={28} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6" fill="white" /> : <Play size={28} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6 ml-1" fill="white" />}
+                        {isRunning ? <Pause size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" fill="white" /> : <Play size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 ml-0.5" fill="white" />}
                     </button>
                     )}
 
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-9 landscape:h-9 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
-                        <RotateCcw size={20} className="md:w-6 md:h-6 landscape:w-5 landscape:h-5" />
+                        <RotateCcw size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
                     </button>
                 </div>
             </div>
