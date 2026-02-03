@@ -432,7 +432,7 @@ export default function App() {
 
       {/* Header - VOW BJJ banner with clock overlay - 152px height */}
       <div
-        className="relative w-full h-[152px] z-30 shrink-0"
+        className="relative w-full h-[130px] z-30 shrink-0"
         style={{
           backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
           backgroundSize: 'cover',
