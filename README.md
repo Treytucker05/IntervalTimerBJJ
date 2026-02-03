@@ -2,11 +2,9 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# Run and deploy your VOW BJJ timer
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1tiZQ4Hl3yZSBs0Ta0b0Z03AEDZhrYUog
+This repository contains a fully client-side interval timer that runs without any API keys.
 
 ## Run Locally
 
@@ -30,8 +28,7 @@ it means the browser is trying to load `index.tsx` directly from a static server
 
 ## Deploy to GitHub Pages
 
-1. In your GitHub repository, go to **Settings → Secrets and variables → Actions** and add a secret named `GEMINI_API_KEY`.
-2. Ensure GitHub Pages is enabled for your repository.
-3. Push to `main` (or run the workflow manually) to trigger the **Deploy to GitHub Pages** workflow.
+1. Ensure GitHub Pages is enabled for your repository.
+2. Push to `main` (or run the workflow manually) to trigger the **Deploy to GitHub Pages** workflow.
 
-> **Note:** This app is a client-side bundle, so the `GEMINI_API_KEY` is embedded in the built assets and exposed to anyone who can load the site.
+> **Tip:** GitHub Pages serves the built `dist/` output produced by Vite. Opening `index.html` directly from the repo will cause the MIME type error above because the browser cannot execute raw `.tsx` files.
