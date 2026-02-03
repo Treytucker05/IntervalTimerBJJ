@@ -376,14 +376,14 @@ export default function App() {
     }
   };
 
-  // Logo border color that matches timer state
+  // Logo border color that matches timer state exactly
   const getLogoBorderColor = () => {
     switch (timerState) {
       case TimerState.WORK: return 'border-green-500 shadow-[0_0_25px_rgba(34,197,94,0.4)]';
       case TimerState.REST: return 'border-red-600 shadow-[0_0_25px_rgba(220,38,38,0.4)]';
       case TimerState.WARMUP: return 'border-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.4)]';
       case TimerState.FINISHED: return 'border-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.4)]';
-      default: return 'border-amber-400/60 shadow-[0_0_25px_rgba(251,191,36,0.3)]';
+      default: return 'border-white/20 shadow-none';
     }
   };
 
@@ -436,25 +436,25 @@ export default function App() {
       {/* MAIN CONTENT AREA - Timer box fills remaining space */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 landscape:px-4 min-h-0 py-2 landscape:py-1">
 
-        {/* TIMER BOX - Contains logos on sides, timer in center */}
+        {/* TIMER BOX - Logos on sides, timer centered */}
         <div className={`
-             relative w-full max-w-6xl h-full landscape:h-full flex
+             relative w-full max-w-6xl h-full landscape:h-full grid grid-cols-[1fr_2fr_1fr]
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* LEFT: Logo - fills available space */}
-            <div className="flex items-center justify-center p-4 landscape:p-2">
+            {/* LEFT: Logo box - centered in its column */}
+            <div className="flex items-center justify-center p-3 md:p-4 landscape:p-2">
                 {customLogo ? (
-                    <img src={customLogo} alt="Custom Logo" className={`h-full max-h-[80%] w-auto object-contain border-4 rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
+                    <img src={customLogo} alt="Custom Logo" className={`max-h-full max-w-full object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
                 ) : (
-                    <div className={`h-full max-h-[80%] aspect-square border-4 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
-                       <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/80 font-bold font-sans">LOGO</span>
+                    <div className={`w-full h-full max-w-[200px] max-h-[200px] md:max-w-[280px] md:max-h-[280px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                       <span className="text-xl md:text-3xl landscape:text-base text-center text-white/80 font-bold font-sans">LOGO</span>
                     </div>
                 )}
             </div>
 
             {/* CENTER: Timer content */}
-            <div className="flex-1 flex flex-col items-center justify-between p-4 landscape:p-2">
+            <div className="flex flex-col items-center justify-between py-3 md:py-4 landscape:py-2">
                 {/* TOP: State Label */}
                 <div className="w-full text-center">
                     <h2 className="text-2xl md:text-5xl landscape:text-xl font-black tracking-[0.2em] animate-pulse opacity-90">
@@ -466,7 +466,7 @@ export default function App() {
                 <div className="flex-1 flex flex-col items-center justify-center">
                     <div className={`
                         font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center w-full
-                        ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[10rem] landscape:text-[18vh]' : 'text-[clamp(6rem,30vw,40vh)] landscape:text-[clamp(4rem,22vh,28vh)]'}
+                        ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[10rem] landscape:text-[18vh]' : 'text-[clamp(5rem,25vw,35vh)] landscape:text-[clamp(4rem,20vh,26vh)]'}
                     `}>
                         {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                     </div>
@@ -478,63 +478,62 @@ export default function App() {
                 </div>
 
                 {/* BOTTOM: Rounds (Left) + Controls (Right) */}
-                <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center justify-between px-2">
                     {/* LEFT: Round Navigation */}
-                    <div className="flex items-center gap-4 landscape:gap-2">
+                    <div className="flex items-center gap-3 landscape:gap-2">
                         <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                            <ChevronLeft size={28} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                            <ChevronLeft size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
                         </button>
 
-                        <div className="flex items-baseline gap-4 md:gap-5">
-                            <span className="text-base md:text-xl landscape:text-xs font-black text-white/50 uppercase font-sans tracking-[0.3em]">
+                        <div className="flex items-baseline gap-3 md:gap-4">
+                            <span className="text-sm md:text-lg landscape:text-xs font-black text-white/50 uppercase font-sans tracking-[0.3em]">
                                 Round
                             </span>
-                            <span className="text-4xl md:text-6xl landscape:text-2xl font-black font-mono text-white">
-                                {currentRound}<span className="text-2xl md:text-4xl landscape:text-lg text-white/30 ml-2">/{config.rounds}</span>
+                            <span className="text-3xl md:text-5xl landscape:text-2xl font-black font-mono text-white">
+                                {currentRound}<span className="text-xl md:text-3xl landscape:text-lg text-white/30 ml-1">/{config.rounds}</span>
                             </span>
                         </div>
 
                         <button onClick={() => changePhase(1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                            <ChevronRight size={28} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                            <ChevronRight size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
                         </button>
                     </div>
 
                     {/* RIGHT: Settings + Play/Pause + Reset Controls */}
-                    <div className="flex items-center gap-4 md:gap-6 landscape:gap-3">
-                        {/* Settings Button */}
+                    <div className="flex items-center gap-3 md:gap-5 landscape:gap-2">
                         <button
                             onClick={() => setShowSettings(!showSettings)}
-                            className="flex items-center justify-center w-14 h-14 md:w-18 md:h-18 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                            className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
                         >
-                            <SettingsIcon size={22} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5" />
+                            <SettingsIcon size={20} className="md:w-6 md:h-6 landscape:w-5 landscape:h-5" />
                         </button>
 
                         {timerState !== TimerState.FINISHED && (
                         <button
                             onClick={toggleTimer}
-                            className={`group flex items-center justify-center w-20 h-20 md:w-28 md:h-28 landscape:w-14 landscape:h-14 rounded-full hover:scale-105 transition-transform shadow-lg ${isRunning ? 'bg-red-500 text-white shadow-red-500/30' : 'bg-green-500 text-white shadow-green-500/30'}`}
+                            className={`group flex items-center justify-center w-16 h-16 md:w-24 md:h-24 landscape:w-12 landscape:h-12 rounded-full hover:scale-105 transition-transform shadow-lg ${isRunning ? 'bg-red-500 text-white shadow-red-500/30' : 'bg-green-500 text-white shadow-green-500/30'}`}
                         >
-                            {isRunning ? <Pause size={36} className="md:w-12 md:h-12 landscape:w-7 landscape:h-7" fill="white" /> : <Play size={36} className="md:w-12 md:h-12 landscape:w-7 landscape:h-7 ml-1" fill="white" />}
+                            {isRunning ? <Pause size={28} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6" fill="white" /> : <Play size={28} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6 ml-1" fill="white" />}
                         </button>
                         )}
 
                         <button
                             onClick={resetTimer}
-                            className="flex items-center justify-center w-14 h-14 md:w-18 md:h-18 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                            className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
                         >
-                            <RotateCcw size={22} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5" />
+                            <RotateCcw size={20} className="md:w-6 md:h-6 landscape:w-5 landscape:h-5" />
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* RIGHT: Logo (mirrored) - fills available space */}
-            <div className="flex items-center justify-center p-4 landscape:p-2">
+            {/* RIGHT: Logo box (mirrored) - centered in its column */}
+            <div className="flex items-center justify-center p-3 md:p-4 landscape:p-2">
                 {customLogo ? (
-                    <img src={customLogo} alt="Custom Logo" className={`h-full max-h-[80%] w-auto object-contain border-4 rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                    <img src={customLogo} alt="Custom Logo" className={`max-h-full max-w-full object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                 ) : (
-                    <div className={`h-full max-h-[80%] aspect-square border-4 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
-                       <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/80 font-bold font-sans">LOGO</span>
+                    <div className={`w-full h-full max-w-[200px] max-h-[200px] md:max-w-[280px] md:max-h-[280px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                       <span className="text-xl md:text-3xl landscape:text-base text-center text-white/80 font-bold font-sans">LOGO</span>
                     </div>
                 )}
             </div>
