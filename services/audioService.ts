@@ -4,7 +4,7 @@ import { SoundType } from '../types';
 const SOUND_FILES: Partial<Record<SoundType, string>> = {
   boxing_bell: 'https://cdn.freesound.org/previews/66/66951_634166-lq.mp3', // Boxing ring bell
   fight: 'https://cdn.freesound.org/previews/320/320181_5260872-lq.mp3', // Fight announcer style
-  rumble: 'https://cdn.freesound.org/previews/411/411089_5121236-lq.mp3', // Rumble/crowd roar
+  rumble: 'https://cdn.freesound.org/previews/587/587196_5674468-lq.mp3', // "Let's get ready to rumble" style announcer
 };
 
 class AudioService {
