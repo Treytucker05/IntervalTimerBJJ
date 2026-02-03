@@ -43,12 +43,12 @@ const TimeSelect = ({ label, value, onChange }: { label: string, value: number, 
       <div className="flex gap-2 items-center">
         {/* Minutes Dropdown */}
         <div className="flex-1 relative group">
-            <select 
-                value={mins} 
+            <select
+                value={mins}
                 onChange={handleMinChange}
-                className="w-full bg-white/10 hover:bg-white/20 text-white p-3 pr-8 rounded appearance-none outline-none font-mono text-xl text-center cursor-pointer transition-colors border border-white/10 focus:border-white/50"
+                className="w-full bg-[#1a1a1a] hover:bg-[#252525] text-white p-3 pr-8 rounded appearance-none outline-none font-mono text-xl text-center cursor-pointer transition-colors border border-white/10 focus:border-white/50 [&>option]:bg-[#1a1a1a] [&>option]:text-white"
             >
-                {minOptions.map(i => <option key={i} value={i} className="bg-[#121212]">{i.toString().padStart(2, '0')}</option>)}
+                {minOptions.map(i => <option key={i} value={i}>{i.toString().padStart(2, '0')}</option>)}
             </select>
             <span className="absolute right-8 top-1/2 -translate-y-1/2 text-[10px] text-white/30 pointer-events-none font-sans font-bold">MIN</span>
             <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 w-4 h-4 pointer-events-none" />
@@ -58,12 +58,12 @@ const TimeSelect = ({ label, value, onChange }: { label: string, value: number, 
 
         {/* Seconds Dropdown */}
         <div className="flex-1 relative group">
-             <select 
-                value={secs} 
+             <select
+                value={secs}
                 onChange={handleSecChange}
-                className="w-full bg-white/10 hover:bg-white/20 text-white p-3 pr-8 rounded appearance-none outline-none font-mono text-xl text-center cursor-pointer transition-colors border border-white/10 focus:border-white/50"
+                className="w-full bg-[#1a1a1a] hover:bg-[#252525] text-white p-3 pr-8 rounded appearance-none outline-none font-mono text-xl text-center cursor-pointer transition-colors border border-white/10 focus:border-white/50 [&>option]:bg-[#1a1a1a] [&>option]:text-white"
             >
-                {secOptions.map(i => <option key={i} value={i} className="bg-[#121212]">{i.toString().padStart(2, '0')}</option>)}
+                {secOptions.map(i => <option key={i} value={i}>{i.toString().padStart(2, '0')}</option>)}
             </select>
             <span className="absolute right-8 top-1/2 -translate-y-1/2 text-[10px] text-white/30 pointer-events-none font-sans font-bold">SEC</span>
             <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 w-4 h-4 pointer-events-none" />
@@ -376,6 +376,24 @@ export default function App() {
     }
   };
 
+  // Logo border color that matches timer state
+  const getLogoBorderColor = () => {
+    switch (timerState) {
+      case TimerState.WORK: return 'border-green-500 shadow-[0_0_25px_rgba(34,197,94,0.4)]';
+      case TimerState.REST: return 'border-red-600 shadow-[0_0_25px_rgba(220,38,38,0.4)]';
+      case TimerState.WARMUP: return 'border-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.4)]';
+      case TimerState.FINISHED: return 'border-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.4)]';
+      default: return 'border-amber-400/60 shadow-[0_0_25px_rgba(251,191,36,0.3)]';
+    }
+  };
+
+  // Test sound preview
+  const playTestSound = (sound: SoundType) => {
+    if (sound !== 'none') {
+      audioService.playSound(sound, config.volume);
+    }
+  };
+
   const getStateLabel = () => {
     switch(timerState) {
       case TimerState.IDLE: return 'READY';
@@ -393,37 +411,37 @@ export default function App() {
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
       {/* Header / Logo Area - Stays OUTSIDE timer box */}
-      <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-20 shrink-0 landscape:py-2 landscape:px-4 bg-[#121212]">
+      <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-30 shrink-0 landscape:py-2 landscape:px-4 bg-[#121212]">
          {/* LEFT: Logo + VOW */}
-         <div className="flex items-center gap-2 md:gap-4">
+         <div className="flex items-center gap-4 md:gap-6">
             {customLogo ? (
-                <img src={customLogo} alt="VOW BJJ" className="h-16 md:h-20 landscape:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
+                <img src={customLogo} alt="Custom Logo" className={`h-32 md:h-40 landscape:h-24 w-auto object-contain border-4 rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
             ) : (
-                <div className="h-16 w-16 md:h-20 md:w-20 landscape:h-14 landscape:w-14 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
-                   <span className="text-[10px] md:text-sm landscape:text-[8px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
+                <div className={`h-32 w-32 md:h-40 md:w-40 landscape:h-24 landscape:w-24 border-4 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                   <span className="text-sm md:text-base landscape:text-xs text-center text-white/80 font-bold font-sans">LOGO</span>
                 </div>
             )}
-            <span className="text-xl md:text-3xl landscape:text-lg font-black tracking-widest text-amber-400 font-mono drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">VOW</span>
+            <img src={`${import.meta.env.BASE_URL}vow-logo.png`} alt="VOW" className="h-24 md:h-32 landscape:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
          </div>
 
-         {/* CENTER: Clock - Responsive Sizing */}
-         <div className="flex flex-col items-center justify-center">
-            <div className="text-5xl md:text-8xl landscape:text-xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
+         {/* CENTER: Clock - Double sized */}
+         <div className="flex flex-col items-center justify-center px-6 md:px-12">
+            <div className="text-7xl md:text-9xl landscape:text-3xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
-            <div className="text-sm md:text-2xl landscape:text-[10px] font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-2 landscape:mt-0">
+            <div className="text-lg md:text-3xl landscape:text-sm font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-2 landscape:mt-0">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
             </div>
          </div>
 
          {/* RIGHT: BJJ + Logo (mirrored) */}
-         <div className="flex items-center justify-end gap-2 md:gap-4">
-            <span className="text-xl md:text-3xl landscape:text-lg font-black tracking-widest text-amber-400 font-mono drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">BJJ</span>
+         <div className="flex items-center justify-end gap-4 md:gap-6">
+            <img src={`${import.meta.env.BASE_URL}bjj-logo.png`} alt="BJJ" className="h-24 md:h-32 landscape:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
             {customLogo ? (
-                <img src={customLogo} alt="VOW BJJ" className="h-16 md:h-20 landscape:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-x-[-1]" />
+                <img src={customLogo} alt="Custom Logo" className={`h-32 md:h-40 landscape:h-24 w-auto object-contain border-4 rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
             ) : (
-                <div className="h-16 w-16 md:h-20 md:w-20 landscape:h-14 landscape:w-14 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
-                   <span className="text-[10px] md:text-sm landscape:text-[8px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
+                <div className={`h-32 w-32 md:h-40 md:w-40 landscape:h-24 landscape:w-24 border-4 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                   <span className="text-sm md:text-base landscape:text-xs text-center text-white/80 font-bold font-sans">LOGO</span>
                 </div>
             )}
          </div>
@@ -449,7 +467,7 @@ export default function App() {
             <div className="flex-1 flex flex-col items-center justify-center">
                 <div className={`
                     font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center w-full
-                    ${timerState === TimerState.FINISHED ? 'text-[10vw] md:text-[8rem] landscape:text-[15vh]' : 'text-[clamp(5rem,28vw,35vh)] landscape:text-[clamp(3rem,20vh,25vh)]'}
+                    ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[10rem] landscape:text-[18vh]' : 'text-[clamp(7rem,35vw,45vh)] landscape:text-[clamp(4rem,25vh,30vh)]'}
                 `}>
                     {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                 </div>
@@ -463,49 +481,49 @@ export default function App() {
             {/* BOTTOM: Rounds (Left) + Controls (Right) */}
             <div className="w-full flex items-center justify-between">
                 {/* LEFT: Round Navigation */}
-                <div className="flex items-center gap-2 landscape:gap-1">
-                    <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                        <ChevronLeft size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                <div className="flex items-center gap-5 landscape:gap-3">
+                    <button onClick={() => changePhase(-1)} className="p-3 landscape:p-2 hover:bg-white/10 rounded-full transition-colors group">
+                        <ChevronLeft size={32} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6 text-white/50 group-hover:text-white transition-all" />
                     </button>
 
-                    <div className="flex items-baseline gap-2">
-                        <span className="text-xs md:text-lg landscape:text-[10px] font-bold text-white/50 uppercase font-sans tracking-widest">
+                    <div className="flex items-baseline gap-5 md:gap-6">
+                        <span className="text-lg md:text-2xl landscape:text-sm font-black text-white/50 uppercase font-sans tracking-[0.3em]">
                             Round
                         </span>
-                        <span className="text-2xl md:text-4xl landscape:text-xl font-black font-mono text-white">
-                            {currentRound}<span className="text-lg md:text-2xl landscape:text-sm text-white/30">/{config.rounds}</span>
+                        <span className="text-5xl md:text-7xl landscape:text-3xl font-black font-mono text-white">
+                            {currentRound}<span className="text-3xl md:text-5xl landscape:text-xl text-white/30 ml-2">/{config.rounds}</span>
                         </span>
                     </div>
 
-                    <button onClick={() => changePhase(1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                        <ChevronRight size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                    <button onClick={() => changePhase(1)} className="p-3 landscape:p-2 hover:bg-white/10 rounded-full transition-colors group">
+                        <ChevronRight size={32} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6 text-white/50 group-hover:text-white transition-all" />
                     </button>
                 </div>
 
                 {/* RIGHT: Settings + Play/Pause + Reset Controls */}
-                <div className="flex items-center gap-3 landscape:gap-2">
-                    {/* Settings Button (moved from header) */}
+                <div className="flex items-center gap-6 md:gap-8 landscape:gap-4">
+                    {/* Settings Button */}
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                        className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 landscape:w-12 landscape:h-12 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
                     >
-                        <SettingsIcon size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                        <SettingsIcon size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" />
                     </button>
 
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
-                        className={`group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full hover:scale-105 transition-transform shadow-lg ${isRunning ? 'bg-red-500 text-white shadow-red-500/20' : 'bg-green-500 text-white shadow-green-500/20'}`}
+                        className={`group flex items-center justify-center w-24 h-24 md:w-32 md:h-32 landscape:w-16 landscape:h-16 rounded-full hover:scale-105 transition-transform shadow-lg ${isRunning ? 'bg-red-500 text-white shadow-red-500/30' : 'bg-green-500 text-white shadow-green-500/30'}`}
                     >
-                        {isRunning ? <Pause size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5" fill="white" /> : <Play size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 ml-0.5" fill="white" />}
+                        {isRunning ? <Pause size={40} className="md:w-14 md:h-14 landscape:w-8 landscape:h-8" fill="white" /> : <Play size={40} className="md:w-14 md:h-14 landscape:w-8 landscape:h-8 ml-1" fill="white" />}
                     </button>
                     )}
 
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                        className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 landscape:w-12 landscape:h-12 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
                     >
-                        <RotateCcw size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                        <RotateCcw size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" />
                     </button>
                 </div>
             </div>
@@ -768,13 +786,13 @@ export default function App() {
                                 { key: 'startRest', label: 'Start Rest' },
                                 { key: 'endRest', label: 'End Rest (To Work)' }
                             ].map((item) => (
-                                <div key={item.key} className="grid grid-cols-[1fr_auto_auto] gap-4 items-center">
+                                <div key={item.key} className="grid grid-cols-[1fr_auto_auto_auto] gap-3 items-center">
                                     <span className="text-sm font-bold text-white/80">{item.label}</span>
-                                    
+
                                     <select
                                         value={config.alerts[item.key as keyof typeof config.alerts].sound}
                                         onChange={(e) => updateAlert(item.key as any, 'sound', e.target.value)}
-                                        className="bg-white/5 border border-white/20 rounded px-2 py-1 text-sm outline-none"
+                                        className="bg-[#1a1a1a] border border-white/20 rounded px-3 py-2 text-sm outline-none text-white [&>option]:bg-[#1a1a1a] [&>option]:text-white"
                                     >
                                         <option value="none">None</option>
                                         <option value="boxing_bell">🥊 Boxing Bell</option>
@@ -787,7 +805,16 @@ export default function App() {
                                         <option value="beep">Beep</option>
                                     </select>
 
-                                    <button 
+                                    {/* Test Sound Button */}
+                                    <button
+                                        onClick={() => playTestSound(config.alerts[item.key as keyof typeof config.alerts].sound)}
+                                        className="p-2 rounded bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+                                        title="Test sound"
+                                    >
+                                        <Volume2 size={18} />
+                                    </button>
+
+                                    <button
                                         onClick={() => updateAlert(item.key as any, 'vibrate', !config.alerts[item.key as keyof typeof config.alerts].vibrate)}
                                         className={`p-2 rounded ${config.alerts[item.key as keyof typeof config.alerts].vibrate ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-white/30'}`}
                                     >
