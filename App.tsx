@@ -342,15 +342,15 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header / Logo Area */}
-      <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-20 shrink-0 landscape:py-1 landscape:px-4 bg-[#121212]">
-         {/* LEFT: Logo */}
+      {/* Header / Logo Area - Stays OUTSIDE timer box */}
+      <div className="w-full p-2 md:p-4 grid grid-cols-[1fr_auto_1fr] items-center z-20 shrink-0 landscape:py-2 landscape:px-4 bg-[#121212]">
+         {/* LEFT: Logo - Bigger in landscape */}
          <div className="flex flex-col gap-2 items-start">
             {customLogo ? (
-                <img src={customLogo} alt="VOW BJJ" className="h-12 md:h-24 landscape:h-8 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
+                <img src={customLogo} alt="VOW BJJ" className="h-12 md:h-24 landscape:h-12 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
             ) : (
-                <div className="h-12 w-12 md:h-24 md:w-24 landscape:h-8 landscape:w-8 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
-                   <span className="text-[10px] md:text-sm landscape:text-[6px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
+                <div className="h-12 w-12 md:h-24 md:w-24 landscape:h-12 landscape:w-12 border-2 border-amber-400/60 flex items-center justify-center rounded-xl landscape:rounded-lg bg-black/60 backdrop-blur-sm shadow-[0_0_25px_rgba(251,191,36,0.3)]">
+                   <span className="text-[10px] md:text-sm landscape:text-[8px] text-center text-amber-400/80 font-bold font-sans">LOGO</span>
                 </div>
             )}
             <h1 className="text-sm md:text-2xl font-bold tracking-widest text-amber-400 font-mono hidden md:block landscape:hidden drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]">V.O.W. JJ</h1>
@@ -358,7 +358,7 @@ export default function App() {
 
          {/* CENTER: Clock - Responsive Sizing */}
          <div className="flex flex-col items-center justify-center">
-            <div className="text-5xl md:text-8xl landscape:text-2xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
+            <div className="text-5xl md:text-8xl landscape:text-xl font-mono font-bold text-amber-400 tracking-wider leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] [text-shadow:_0_0_30px_rgba(251,191,36,0.4)]">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
             <div className="text-sm md:text-2xl landscape:text-[10px] font-bold font-sans text-amber-200 uppercase tracking-[0.25em] mt-2 landscape:mt-0">
@@ -368,85 +368,89 @@ export default function App() {
 
          {/* RIGHT: Settings */}
          <div className="flex justify-end">
-             <button 
+             <button
                 onClick={() => setShowSettings(!showSettings)}
-                className="p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white transition-all"
+                className="p-2 md:p-3 landscape:p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white transition-all"
              >
-                <SettingsIcon size={20} className="md:w-6 md:h-6" />
+                <SettingsIcon size={20} className="md:w-6 md:h-6 landscape:w-5 landscape:h-5" />
              </button>
          </div>
       </div>
 
-      {/* MAIN CONTENT AREA - Timer takes mostly everything */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 landscape:px-8 min-h-0 py-2 landscape:py-1">
+      {/* MAIN CONTENT AREA - Timer box fills remaining space */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 landscape:px-4 min-h-0 py-2 landscape:py-1">
 
-        {/* TIMER BOX - Centered, Large with colored borders/text */}
+        {/* TIMER BOX - Contains everything: state label, timer, rounds, controls */}
         <div className={`
-             relative w-full max-w-5xl h-full landscape:h-full aspect-video md:aspect-[2/1] landscape:!aspect-auto flex flex-col items-center justify-center
+             relative w-full max-w-5xl h-full landscape:h-full aspect-video md:aspect-[2/1] landscape:!aspect-auto flex flex-col items-center justify-between
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
-             transition-all duration-300 ${themeStyles}
+             transition-all duration-300 p-4 landscape:p-3 ${themeStyles}
         `}>
-            <h2 className="text-2xl md:text-5xl landscape:text-4xl font-black tracking-[0.2em] mb-0 landscape:mb-2 animate-pulse text-center opacity-90">
-                {getStateLabel()}
-            </h2>
-            
-            {/* Timer Text */}
-            <div className={`
-                font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center w-full
-                ${timerState === TimerState.FINISHED ? 'text-[10vw] md:text-[8rem]' : 'text-[clamp(5rem,28vw,45vh)]'}
-            `}>
-                {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
+            {/* TOP: State Label */}
+            <div className="w-full text-center">
+                <h2 className="text-2xl md:text-5xl landscape:text-xl font-black tracking-[0.2em] animate-pulse opacity-90">
+                    {getStateLabel()}
+                </h2>
             </div>
-            
-             <div className="mt-2 landscape:mt-0 text-white/40 text-xs md:text-sm font-sans uppercase tracking-widest text-center">
-                 {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` : 
-                  timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
-             </div>
+
+            {/* CENTER: Timer Display */}
+            <div className="flex-1 flex flex-col items-center justify-center">
+                <div className={`
+                    font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center w-full
+                    ${timerState === TimerState.FINISHED ? 'text-[10vw] md:text-[8rem] landscape:text-[15vh]' : 'text-[clamp(5rem,28vw,35vh)] landscape:text-[clamp(3rem,20vh,25vh)]'}
+                `}>
+                    {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
+                </div>
+
+                <div className="mt-1 landscape:mt-0 text-white/40 text-xs md:text-sm landscape:text-[10px] font-sans uppercase tracking-widest text-center">
+                    {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` :
+                     timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
+                </div>
+            </div>
+
+            {/* BOTTOM: Rounds (Left) + Controls (Right) */}
+            <div className="w-full flex items-center justify-between">
+                {/* LEFT: Round Navigation */}
+                <div className="flex items-center gap-2 landscape:gap-1">
+                    <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
+                        <ChevronLeft size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                    </button>
+
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-xs md:text-lg landscape:text-[10px] font-bold text-white/50 uppercase font-sans tracking-widest">
+                            Round
+                        </span>
+                        <span className="text-2xl md:text-4xl landscape:text-xl font-black font-mono text-white">
+                            {currentRound}<span className="text-lg md:text-2xl landscape:text-sm text-white/30">/{config.rounds}</span>
+                        </span>
+                    </div>
+
+                    <button onClick={() => changePhase(1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
+                        <ChevronRight size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
+                    </button>
+                </div>
+
+                {/* RIGHT: Play/Pause + Reset Controls */}
+                <div className="flex items-center gap-3 landscape:gap-2">
+                    {timerState !== TimerState.FINISHED && (
+                    <button
+                        onClick={toggleTimer}
+                        className="group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white text-black hover:scale-105 transition-transform shadow-lg shadow-white/10"
+                    >
+                        {isRunning ? <Pause size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5" fill="black" /> : <Play size={24} className="md:w-7 md:h-7 landscape:w-5 landscape:h-5 ml-0.5" fill="black" />}
+                    </button>
+                    )}
+
+                    <button
+                        onClick={resetTimer}
+                        className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 landscape:w-10 landscape:h-10 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                    >
+                        <RotateCcw size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                    </button>
+                </div>
+            </div>
         </div>
 
-      </div>
-
-      {/* FOOTER - Rounds and Controls */}
-      <div className="z-20 w-full p-4 md:p-6 landscape:p-2 landscape:py-2 bg-[#121212] border-t border-white/5 grid grid-cols-2 items-center shrink-0">
-            
-            {/* LEFT: Rounds */}
-            <div className="flex items-center justify-start gap-4 landscape:gap-2">
-                 <button onClick={() => changePhase(-1)} className="p-3 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                    <ChevronLeft size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
-                 </button>
-
-                 <div className="flex flex-col md:flex-row md:items-baseline gap-0 md:gap-3">
-                    <span className="text-xs md:text-xl landscape:text-[10px] font-bold text-white/50 uppercase font-sans tracking-widest">
-                        Round
-                    </span>
-                    <span className="text-3xl md:text-5xl landscape:text-2xl font-black font-mono text-white">
-                        {currentRound}<span className="text-xl md:text-3xl landscape:text-lg text-white/30">/{config.rounds}</span>
-                    </span>
-                 </div>
-
-                 <button onClick={() => changePhase(1)} className="p-3 landscape:p-1 hover:bg-white/10 rounded-full transition-colors group">
-                    <ChevronRight size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 text-white/50 group-hover:text-white transition-all" />
-                 </button>
-            </div>
-
-            {/* RIGHT: Controls */}
-            <div className="flex items-center justify-end gap-4 md:gap-8 landscape:gap-3">
-                {timerState !== TimerState.FINISHED && (
-                <button
-                    onClick={toggleTimer}
-                    className="group flex items-center justify-center w-16 h-16 md:w-20 md:h-20 landscape:w-12 landscape:h-12 rounded-full bg-white text-black hover:scale-105 transition-transform shadow-lg shadow-white/10"
-                >
-                    {isRunning ? <Pause size={28} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" fill="black" /> : <Play size={28} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 ml-1" fill="black" />}
-                </button>
-                )}
-
-                <button
-                    onClick={resetTimer}
-                    className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 landscape:w-12 landscape:h-12 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
-                >
-                    <RotateCcw size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" />
-                </button>
-            </div>
       </div>
 
       {/* Settings Modal */}
