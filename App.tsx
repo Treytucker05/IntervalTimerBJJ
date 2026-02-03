@@ -114,11 +114,25 @@ export default function App() {
       return saved !== null ? JSON.parse(saved) : true;
     } catch { return true; }
   });
+  const [isLandscape, setIsLandscape] = useState(() => window.innerWidth > window.innerHeight);
 
   // Persist showLogos setting
   useEffect(() => {
     localStorage.setItem('showLogos', JSON.stringify(showLogos));
   }, [showLogos]);
+
+  // Track orientation changes
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLandscape(window.innerWidth > window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
 
   // Refs for accurate timing
   const timerRef = useRef<number | null>(null);
@@ -461,7 +475,7 @@ export default function App() {
              transition-all duration-300 ${themeStyles}
         `}>
             {/* LEFT: Custom Logo (conditionally shown) */}
-            {showLogos && (
+            {showLogos && isLandscape && (
                 <div className={`h-full flex items-center justify-center p-3 md:p-4 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
                         <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] w-16 md:w-28 object-contain border-2 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
@@ -548,7 +562,7 @@ export default function App() {
             </div>
 
             {/* RIGHT: Custom Logo (conditionally shown) */}
-            {showLogos && (
+            {showLogos && isLandscape && (
                 <div className={`h-full flex items-center justify-center p-3 md:p-4 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
                         <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] w-16 md:w-28 object-contain border-2 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
@@ -889,7 +903,7 @@ export default function App() {
                                     <ImageIcon className={showLogos ? 'text-green-400' : 'text-white/70'} />
                                     <div className="text-left">
                                         <div className="font-bold">Show Logo Panels</div>
-                                        <div className="text-xs text-white/50">Display logo sections on left and right of timer</div>
+                                        <div className="text-xs text-white/50">Show logos in landscape mode (always hidden in portrait)</div>
                                     </div>
                                 </div>
                                 <div className={`w-12 h-6 rounded-full transition-all ${showLogos ? 'bg-green-500' : 'bg-white/20'}`}>
