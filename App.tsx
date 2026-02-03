@@ -414,7 +414,7 @@ export default function App() {
       <div className="w-full p-2 md:p-4 grid grid-cols-3 items-center z-30 shrink-0 landscape:py-2 landscape:px-4 bg-[#121212]">
          {/* LEFT: VOW centered in its column */}
          <div className="flex items-center justify-center">
-            <img src={`${import.meta.env.BASE_URL}vow-logo.png`} alt="VOW" className="h-20 md:h-28 landscape:h-14 w-auto object-contain drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
+            <img src={`${import.meta.env.BASE_URL}vow-logo.jpg`} alt="VOW" className="h-16 md:h-24 landscape:h-12 w-auto object-contain rounded-lg drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
          </div>
 
          {/* CENTER: Clock */}
@@ -429,7 +429,7 @@ export default function App() {
 
          {/* RIGHT: BJJ centered in its column */}
          <div className="flex items-center justify-center">
-            <img src={`${import.meta.env.BASE_URL}bjj-logo.png`} alt="BJJ" className="h-20 md:h-28 landscape:h-14 w-auto object-contain drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
+            <img src={`${import.meta.env.BASE_URL}bjj-logo.jpg`} alt="BJJ" className="h-16 md:h-24 landscape:h-12 w-auto object-contain rounded-lg drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
          </div>
       </div>
 
@@ -442,12 +442,14 @@ export default function App() {
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* LEFT: Logo - centered between timer border and timer content */}
+            {/* LEFT: Custom Logo - centered between timer border and timer content */}
             <div className="w-[20%] flex items-center justify-center p-2 md:p-4 landscape:p-2">
                 {customLogo ? (
                     <img src={customLogo} alt="Custom Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
                 ) : (
-                    <img src={`${import.meta.env.BASE_URL}vow-logo.jpg`} alt="VOW Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
+                    <div className={`w-full h-full max-w-[180px] max-h-[180px] md:max-w-[240px] md:max-h-[240px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                       <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/60 font-bold font-sans">LOGO</span>
+                    </div>
                 )}
             </div>
 
@@ -525,12 +527,14 @@ export default function App() {
                 </div>
             </div>
 
-            {/* RIGHT: Logo - centered between timer content and timer border */}
+            {/* RIGHT: Custom Logo - centered between timer content and timer border */}
             <div className="w-[20%] flex items-center justify-center p-2 md:p-4 landscape:p-2">
                 {customLogo ? (
                     <img src={customLogo} alt="Custom Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                 ) : (
-                    <img src={`${import.meta.env.BASE_URL}bjj-logo.jpg`} alt="BJJ Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
+                    <div className={`w-full h-full max-w-[180px] max-h-[180px] md:max-w-[240px] md:max-h-[240px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                       <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/60 font-bold font-sans">LOGO</span>
+                    </div>
                 )}
             </div>
         </div>
