@@ -430,21 +430,22 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW BJJ banner with clock overlay */}
+      {/* Header - VOW BJJ banner with clock overlay - fluid responsive height */}
       <div
-        className="relative w-full h-16 md:h-20 landscape:h-12 z-30 shrink-0"
+        className="relative w-full z-30 shrink-0"
         style={{
+          height: 'clamp(48px, 10vw, 100px)',
           backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
         {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
-        <div className="absolute inset-0 flex items-center justify-center gap-3">
-          <span className="text-lg md:text-2xl landscape:text-sm font-mono font-medium text-white/80 tracking-wide">
+        <div className="absolute inset-0 flex items-center justify-center gap-2 md:gap-3">
+          <span className="font-mono font-medium text-white/80 tracking-wide" style={{ fontSize: 'clamp(14px, 2.5vw, 28px)' }}>
             {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
-          <span className="text-xs md:text-sm landscape:text-[10px] font-sans text-white/50 uppercase tracking-wider">
+          <span className="font-sans text-white/50 uppercase tracking-wider" style={{ fontSize: 'clamp(10px, 1.5vw, 16px)' }}>
             {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
           </span>
         </div>
