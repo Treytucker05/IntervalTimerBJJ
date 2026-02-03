@@ -18,6 +18,15 @@ const formatTime = (seconds: number): string => {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 };
 
+// --- Helper to format total time as "X Minutes Y Seconds" ---
+const formatTotalTime = (seconds: number): string => {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  if (s === 0) return `${m} Minute${m !== 1 ? 's' : ''}`;
+  if (m === 0) return `${s} Second${s !== 1 ? 's' : ''}`;
+  return `${m} Min ${s} Sec`;
+};
+
 // --- Helper Component for Time Input (Dropdowns) ---
 const TimeSelect = ({ label, value, onChange }: { label: string, value: number, onChange: (val: number) => void }) => {
   const mins = Math.floor(value / 60);
@@ -99,6 +108,17 @@ export default function App() {
 
   // UI State
   const [showSettings, setShowSettings] = useState(false);
+  const [showLogos, setShowLogos] = useState(() => {
+    try {
+      const saved = localStorage.getItem('showLogos');
+      return saved !== null ? JSON.parse(saved) : true;
+    } catch { return true; }
+  });
+
+  // Persist showLogos setting
+  useEffect(() => {
+    localStorage.setItem('showLogos', JSON.stringify(showLogos));
+  }, [showLogos]);
 
   // Refs for accurate timing
   const timerRef = useRef<number | null>(null);
@@ -410,9 +430,9 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW BJJ banner with clock overlay */}
+      {/* Header - VOW BJJ banner with clock overlay - TALLER */}
       <div
-        className="relative w-full h-12 md:h-16 landscape:h-10 z-30 shrink-0"
+        className="relative w-full h-16 md:h-20 landscape:h-12 z-30 shrink-0"
         style={{
           backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
           backgroundSize: 'cover',
@@ -421,10 +441,10 @@ export default function App() {
       >
          {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
          <div className="absolute inset-0 flex items-center justify-center gap-3">
-            <span className="text-lg md:text-2xl landscape:text-sm font-mono font-medium text-white/80 tracking-wide">
+            <span className="text-xl md:text-3xl landscape:text-base font-mono font-medium text-white/80 tracking-wide">
               {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
-            <span className="text-xs md:text-sm landscape:text-[10px] font-sans text-white/50 uppercase tracking-wider">
+            <span className="text-sm md:text-base landscape:text-xs font-sans text-white/50 uppercase tracking-wider">
               {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
             </span>
          </div>
@@ -433,68 +453,33 @@ export default function App() {
       {/* MAIN CONTENT AREA - Timer box fills remaining space */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-3 md:px-4 landscape:px-3 min-h-0 py-2 landscape:py-1">
 
-        {/* TIMER BOX - Clean single border, consistent 16px radius */}
+        {/* TIMER BOX - Clean single border, no footer */}
         <div className={`
-             relative w-full max-w-5xl h-full landscape:h-full flex flex-col
+             relative w-full max-w-5xl h-full landscape:h-full flex
              border-4 md:border-[6px] landscape:border-3 bg-black/50 rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* TOP SECTION: Logos + Timer */}
-            <div className={`flex-1 grid grid-cols-[1fr_auto_1fr] items-center border-b-2 md:border-b-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
-                {/* LEFT: Custom Logo - smaller, less dominant */}
-                <div className="h-full flex items-center justify-center p-2 md:p-3 landscape:p-2">
+            {/* LEFT: Custom Logo (conditionally shown) */}
+            {showLogos && (
+                <div className={`h-full flex items-center justify-center p-2 md:p-4 landscape:p-2 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[70%] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                        <div className={`h-[40%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
                            <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
                         </div>
                     )}
                 </div>
+            )}
 
-                {/* CENTER: Timer content - DOMINANT element */}
-                <div className="flex flex-col items-center justify-center py-2 md:py-3 landscape:py-1 px-6 md:px-12">
-                    {/* State Label - tighter gap, better contrast */}
-                    <h2 className="text-xl md:text-3xl landscape:text-base font-bold tracking-[0.15em] text-white/80 mb-1">
-                        {getStateLabel()}
-                    </h2>
-
-                    {/* Timer Display - 20% larger, dominant */}
-                    <div className={`
-                        font-mono leading-none tracking-tight tabular-nums text-center
-                        ${timerState === TimerState.FINISHED ? 'text-[14vw] md:text-[12rem] landscape:text-[20vh]' : 'text-[clamp(6rem,26vw,38vh)] landscape:text-[clamp(5rem,24vh,32vh)]'}
-                    `}>
-                        {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
-                    </div>
-
-                    {/* Secondary info - better contrast, more gap from timer */}
-                    <div className="mt-3 landscape:mt-2 text-white/60 text-sm md:text-base landscape:text-xs font-medium font-sans uppercase tracking-wider text-center">
-                        {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` :
-                         timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
-                    </div>
-                </div>
-
-                {/* RIGHT: Custom Logo - smaller, less dominant */}
-                <div className="h-full flex items-center justify-center p-2 md:p-3 landscape:p-2">
-                    {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[70%] max-w-[70%] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
-                    ) : (
-                        <div className={`h-[50%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* BOTTOM: Controls bar - reduced height (~25% smaller) */}
-            <div className="w-full grid grid-cols-2 py-2 md:py-3 landscape:py-1">
-                {/* LEFT HALF: Round Navigation - balanced typography */}
-                <div className="flex items-center justify-center gap-2 landscape:gap-1">
+            {/* CENTER: Timer content - All stacked vertically */}
+            <div className="flex-1 flex flex-col items-center justify-center py-3 md:py-4 landscape:py-2 px-4 md:px-8">
+                {/* Round Navigation - NOW AT TOP */}
+                <div className="flex items-center justify-center gap-2 landscape:gap-1 mb-2 md:mb-3">
                     <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-lg transition-colors group">
                         <ChevronLeft size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white/50 group-hover:text-white transition-all" />
                     </button>
 
-                    {/* Fixed ROUND typography - unified scale */}
                     <div className="flex items-center gap-2">
                         <span className="text-base md:text-xl landscape:text-sm font-bold text-white/70 uppercase font-sans tracking-wider">
                             Round
@@ -512,8 +497,30 @@ export default function App() {
                     </button>
                 </div>
 
-                {/* RIGHT HALF: Controls - consistent sizing, reduced glow */}
-                <div className="flex items-center justify-center gap-4 md:gap-6 landscape:gap-3">
+                {/* State Label */}
+                <h2 className="text-xl md:text-3xl landscape:text-base font-bold tracking-[0.15em] text-white/80 mb-1">
+                    {getStateLabel()}
+                </h2>
+
+                {/* Total Time - Below state label, formatted as Minutes/Seconds */}
+                <div className="text-white/50 text-sm md:text-base landscape:text-xs font-medium font-sans tracking-wider text-center mb-2">
+                    {timerState === TimerState.IDLE
+                        ? `Total: ${formatTotalTime(config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)}`
+                        : timerState === TimerState.FINISHED
+                            ? 'Great training session!'
+                            : 'Push the Pace'}
+                </div>
+
+                {/* Timer Display - DOMINANT */}
+                <div className={`
+                    font-mono leading-none tracking-tight tabular-nums text-center
+                    ${timerState === TimerState.FINISHED ? 'text-[14vw] md:text-[12rem] landscape:text-[18vh]' : 'text-[clamp(5rem,24vw,32vh)] landscape:text-[clamp(4rem,20vh,28vh)]'}
+                `}>
+                    {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
+                </div>
+
+                {/* Controls - NOW BELOW TIMER */}
+                <div className="flex items-center justify-center gap-4 md:gap-6 landscape:gap-3 mt-4 md:mt-6 landscape:mt-3">
                     <button
                         onClick={() => setShowSettings(!showSettings)}
                         className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-9 landscape:h-9 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
@@ -538,6 +545,19 @@ export default function App() {
                     </button>
                 </div>
             </div>
+
+            {/* RIGHT: Custom Logo (conditionally shown) */}
+            {showLogos && (
+                <div className={`h-full flex items-center justify-center p-2 md:p-4 landscape:p-2 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
+                    {customLogo ? (
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] max-w-[120px] md:max-w-[180px] object-contain border-2 md:border-3 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                    ) : (
+                        <div className={`h-[40%] aspect-square border-2 md:border-3 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
+                           <span className="text-sm md:text-lg landscape:text-xs text-center text-white/40 font-medium font-sans">LOGO</span>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
 
       </div>
@@ -859,11 +879,28 @@ export default function App() {
                     <div>
                         <h3 className="text-sm uppercase tracking-widest text-white/50 mb-4">Branding</h3>
                         <div className="flex flex-col gap-4">
+                            {/* Show/Hide Logos Toggle */}
+                            <button
+                                onClick={() => setShowLogos(!showLogos)}
+                                className={`flex items-center justify-between p-4 rounded-lg border transition-all ${showLogos ? 'bg-green-500/10 border-green-500/50' : 'bg-white/5 border-white/10'}`}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <ImageIcon className={showLogos ? 'text-green-400' : 'text-white/70'} />
+                                    <div className="text-left">
+                                        <div className="font-bold">Show Logo Panels</div>
+                                        <div className="text-xs text-white/50">Display logo sections on left and right of timer</div>
+                                    </div>
+                                </div>
+                                <div className={`w-12 h-6 rounded-full transition-all ${showLogos ? 'bg-green-500' : 'bg-white/20'}`}>
+                                    <div className={`w-5 h-5 rounded-full bg-white transition-all mt-0.5 ${showLogos ? 'ml-6' : 'ml-0.5'}`} />
+                                </div>
+                            </button>
+
                             <label className="flex items-center gap-4 cursor-pointer p-4 bg-white/5 rounded-lg hover:bg-white/10 transition">
                                 <ImageIcon className="text-white/70" />
                                 <div className="flex-1">
                                     <div className="font-bold">Upload Logo</div>
-                                    <div className="text-xs text-white/50">Replace the default header logo</div>
+                                    <div className="text-xs text-white/50">Replace the default logo placeholder</div>
                                 </div>
                                 <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
                             </label>
