@@ -455,8 +455,8 @@ export default function App() {
         }}
       >
         {/* CENTER: Clock overlay - positioned in the dashed rectangle area */}
-        <div className="absolute inset-0 flex items-center justify-center gap-2 md:gap-3">
-          <span className="font-mono font-medium text-white/80 tracking-wide" style={{ fontSize: 'clamp(14px, 2.5vw, 28px)' }}>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="font-mono font-bold text-white/90 tracking-wide" style={{ fontSize: 'clamp(28px, 5vw, 56px)' }}>
             {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
           <span className="font-sans text-white/50 uppercase tracking-wider" style={{ fontSize: 'clamp(10px, 1.5vw, 16px)' }}>
