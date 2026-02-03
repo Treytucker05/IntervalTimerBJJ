@@ -442,21 +442,21 @@ export default function App() {
              border-[6px] md:border-[12px] landscape:border-4 bg-black/40 backdrop-blur-sm rounded-3xl landscape:rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* TOP SECTION: Logos + Timer */}
-            <div className="flex-1 flex items-stretch">
-                {/* LEFT: Custom Logo - centered between timer border and timer content */}
-                <div className="w-[20%] flex items-center justify-center p-2 md:p-4 landscape:p-2">
+            {/* TOP SECTION: Logos + Timer using CSS Grid for precise centering */}
+            <div className="flex-1 grid grid-cols-[1fr_auto_1fr] items-center">
+                {/* LEFT: Custom Logo - centered in space between outer border and timer */}
+                <div className="h-full flex items-center justify-center p-2 md:p-4 landscape:p-2">
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[80%] max-w-[80%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`w-full h-full max-w-[180px] max-h-[180px] md:max-w-[240px] md:max-h-[240px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                        <div className={`h-[60%] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
                            <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/60 font-bold font-sans">LOGO</span>
                         </div>
                     )}
                 </div>
 
-                {/* CENTER: Timer content - takes remaining space */}
-                <div className="flex-1 flex flex-col items-center justify-center py-3 md:py-4 landscape:py-2">
+                {/* CENTER: Timer content - auto width based on content */}
+                <div className="flex flex-col items-center justify-center py-3 md:py-4 landscape:py-2 px-4 md:px-8">
                     {/* TOP: State Label */}
                     <div className="w-full text-center mb-2">
                         <h2 className="text-2xl md:text-5xl landscape:text-xl font-black tracking-[0.2em] animate-pulse opacity-90">
@@ -480,12 +480,12 @@ export default function App() {
                     </div>
                 </div>
 
-                {/* RIGHT: Custom Logo - centered between timer content and timer border */}
-                <div className="w-[20%] flex items-center justify-center p-2 md:p-4 landscape:p-2">
+                {/* RIGHT: Custom Logo - centered in space between timer and outer border */}
+                <div className="h-full flex items-center justify-center p-2 md:p-4 landscape:p-2">
                     {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[90%] max-w-[90%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
+                        <img src={customLogo} alt="Custom Logo" className={`max-h-[80%] max-w-[80%] object-contain border-4 md:border-[6px] rounded-xl transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
                     ) : (
-                        <div className={`w-full h-full max-w-[180px] max-h-[180px] md:max-w-[240px] md:max-h-[240px] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
+                        <div className={`h-[60%] aspect-square border-4 md:border-[6px] flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-sm transition-all duration-300 ${getLogoBorderColor()}`}>
                            <span className="text-lg md:text-2xl landscape:text-sm text-center text-white/60 font-bold font-sans">LOGO</span>
                         </div>
                     )}
