@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    margin: 0;
+    background-color: #121212;
+    color: #ffffff;
+  }
+}
+
+/* Hide scrollbar for clean kiosk look */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
