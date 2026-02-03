@@ -212,7 +212,6 @@ export default function App() {
   // --- Phase Skipping Logic (Smart Navigation) ---
   const changePhase = (direction: number) => {
     let newState = timerState;
-    let nextRound = currentRound;
     
     // Helper to immediately apply state and time without running
     const applyState = (s: TimerState, r: number) => {
@@ -286,14 +285,15 @@ export default function App() {
   };
 
   const saveCurrentAsProfile = (isUpdate: boolean) => {
-    const name = isUpdate ? config.name : prompt("Enter a name for this custom timer:", "Custom VOW Timer");
-    if (!name) return;
+    if (!config.name.trim()) {
+        alert("Please enter a profile name");
+        return;
+    }
 
     if (isUpdate) {
         setSavedProfiles(prev => prev.map(p => p.id === config.id ? {...config} : p));
-        alert('Profile Updated');
     } else {
-        const newProfile = { ...config, id: Date.now().toString(), name };
+        const newProfile = { ...config, id: Date.now().toString() };
         setSavedProfiles([...savedProfiles, newProfile]);
         setConfig(newProfile);
     }
@@ -327,14 +327,14 @@ export default function App() {
   };
 
   // --- Styles ---
-  const getBackgroundColor = () => {
-    if (bgImage) return 'black';
+  const getThemeStyles = () => {
+    // Returns classes for Border and Text color
     switch (timerState) {
-      case TimerState.WORK: return 'bg-green-600';
-      case TimerState.REST: return 'bg-red-600';
-      case TimerState.WARMUP: return 'bg-blue-600';
-      case TimerState.FINISHED: return 'bg-purple-600';
-      default: return 'bg-[#121212]';
+      case TimerState.WORK: return 'border-green-500 text-green-500 shadow-[0_0_40px_rgba(34,197,94,0.15)]';
+      case TimerState.REST: return 'border-red-600 text-red-600 shadow-[0_0_40px_rgba(220,38,38,0.15)]';
+      case TimerState.WARMUP: return 'border-blue-500 text-blue-500';
+      case TimerState.FINISHED: return 'border-purple-500 text-purple-500 animate-pulse';
+      default: return 'border-white/20 text-white';
     }
   };
 
@@ -349,9 +349,10 @@ export default function App() {
   };
 
   const isSavedProfile = savedProfiles.some(p => p.id === config.id);
+  const themeStyles = getThemeStyles();
 
   return (
-    <div className={`relative h-[100dvh] w-full flex flex-col transition-colors duration-500 overflow-hidden ${getBackgroundColor()}`}>
+    <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
       
       {bgImage && (
         <div 
@@ -395,78 +396,76 @@ export default function App() {
          </div>
       </div>
 
-      {/* Main Layout: Grid that adapts to landscape/portrait */}
-      <div className="z-10 flex-1 w-full min-h-0 p-4 pt-0 md:pb-8 grid grid-cols-1 landscape:grid-cols-[1fr_auto] grid-rows-[auto_1fr_auto] landscape:grid-rows-[1fr_1fr] gap-4 landscape:gap-6 items-center justify-items-center">
+      {/* MAIN CONTENT AREA - Timer takes mostly everything */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-4 min-h-0">
         
-        {/* ROUNDS: Top in Portrait, Top-Right in Landscape */}
-        <div className="col-span-1 landscape:col-start-2 landscape:row-start-1 landscape:self-end flex items-center gap-4 md:gap-8 landscape:gap-4 shrink-0">
-             <button onClick={() => changePhase(-1)} className="p-2 hover:bg-white/10 rounded-full transition-colors group">
-                <ChevronLeft size={24} className="md:w-8 md:h-8 landscape:w-6 landscape:h-6 text-white/50 group-hover:text-white group-hover:-translate-x-1 transition-all" />
-             </button>
-             
-             <div className="flex items-baseline gap-2 md:gap-4">
-                <span className="text-xl md:text-3xl landscape:text-xl font-bold text-white/70 uppercase font-sans tracking-widest">
-                    Round
-                </span>
-                <span className="text-4xl md:text-7xl landscape:text-5xl font-black font-mono text-white">
-                    {currentRound}<span className="text-2xl md:text-4xl landscape:text-2xl text-white/50">/{config.rounds}</span>
-                </span>
-             </div>
-
-             <button onClick={() => changePhase(1)} className="p-2 hover:bg-white/10 rounded-full transition-colors group">
-                <ChevronRight size={24} className="md:w-8 md:h-8 landscape:w-6 landscape:h-6 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
-             </button>
-        </div>
-
-        {/* TIMER: Middle in Portrait, Left Side (Full Height) in Landscape */}
+        {/* TIMER BOX - Centered, Large with colored borders/text */}
         <div className={`
-             col-span-1 landscape:col-start-1 landscape:row-span-2
-             relative w-full h-full flex flex-col items-center justify-center
-             border-4 md:border-8 border-white/10 bg-black/30 backdrop-blur-sm rounded-3xl
-             transition-all duration-300
-             ${timerState === TimerState.WORK ? 'shadow-[0_0_50px_rgba(22,163,74,0.3)]' : ''}
-             ${timerState === TimerState.REST ? 'shadow-[0_0_50px_rgba(220,38,38,0.3)]' : ''}
-             ${timerState === TimerState.FINISHED ? 'shadow-[0_0_50px_rgba(147,51,234,0.3)] border-purple-500/50' : ''}
+             relative w-full max-w-5xl aspect-video md:aspect-[2/1] landscape:aspect-auto landscape:h-[70vh] flex flex-col items-center justify-center
+             border-[6px] md:border-[12px] bg-black/40 backdrop-blur-sm rounded-3xl
+             transition-all duration-300 ${themeStyles}
         `}>
-            <h2 className={`
-                text-2xl md:text-5xl landscape:text-3xl font-black tracking-[0.2em] mb-2 landscape:mb-1 text-center
-                ${timerState === TimerState.FINISHED ? 'text-purple-300 animate-bounce' : 'animate-pulse'}
-            `}>
+            <h2 className="text-2xl md:text-5xl landscape:text-4xl font-black tracking-[0.2em] mb-0 landscape:mb-2 animate-pulse text-center opacity-90">
                 {getStateLabel()}
             </h2>
             
-            {/* Timer Text: Maximized size using clamp and viewport units */}
+            {/* Timer Text */}
             <div className={`
                 font-mono leading-none tracking-tighter tabular-nums drop-shadow-2xl text-center w-full
-                ${timerState === TimerState.FINISHED ? 'text-[12vw] md:text-[8rem]' : 'text-[clamp(4rem,25vw,35vh)]'}
+                ${timerState === TimerState.FINISHED ? 'text-[10vw] md:text-[8rem]' : 'text-[clamp(5rem,28vw,45vh)]'}
             `}>
                 {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
             </div>
             
-             <div className="mt-4 landscape:mt-2 text-white/40 text-xs md:text-sm font-sans uppercase tracking-widest text-center">
+             <div className="mt-2 landscape:mt-0 text-white/40 text-xs md:text-sm font-sans uppercase tracking-widest text-center">
                  {timerState === TimerState.IDLE ? `Total: ${Math.ceil((config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)/60)}m` : 
                   timerState === TimerState.FINISHED ? 'Great training session!' : 'Push the Pace'}
              </div>
         </div>
 
-        {/* CONTROLS: Bottom in Portrait, Bottom-Right in Landscape */}
-        <div className="col-span-1 landscape:col-start-2 landscape:row-start-2 landscape:self-start flex gap-6 md:gap-8 landscape:gap-4 shrink-0">
-            {timerState !== TimerState.FINISHED && (
-            <button 
-                onClick={toggleTimer}
-                className="group relative flex items-center justify-center w-20 h-20 md:w-24 md:h-24 landscape:w-16 landscape:h-16 rounded-full bg-white text-black hover:scale-110 transition-transform shadow-xl"
-            >
-                {isRunning ? <Pause size={32} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6" fill="black" /> : <Play size={32} className="md:w-10 md:h-10 landscape:w-6 landscape:h-6 ml-1" fill="black" />}
-            </button>
-            )}
+      </div>
+
+      {/* FOOTER - Rounds and Controls */}
+      <div className="z-10 w-full p-4 md:p-6 bg-black/40 backdrop-blur-md border-t border-white/5 grid grid-cols-2 items-center">
             
-            <button 
-                onClick={resetTimer}
-                className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 landscape:w-16 landscape:h-16 rounded-full bg-white/10 text-white hover:bg-white/20 backdrop-blur-md hover:scale-110 transition-all border border-white/10"
-            >
-                <RotateCcw size={24} className="md:w-8 md:h-8 landscape:w-6 landscape:h-6" />
-            </button>
-        </div>
+            {/* LEFT: Rounds */}
+            <div className="flex items-center justify-start gap-4">
+                 <button onClick={() => changePhase(-1)} className="p-3 hover:bg-white/10 rounded-full transition-colors group">
+                    <ChevronLeft size={24} className="md:w-8 md:h-8 text-white/50 group-hover:text-white transition-all" />
+                 </button>
+                 
+                 <div className="flex flex-col md:flex-row md:items-baseline gap-0 md:gap-3">
+                    <span className="text-xs md:text-xl font-bold text-white/50 uppercase font-sans tracking-widest">
+                        Round
+                    </span>
+                    <span className="text-3xl md:text-5xl font-black font-mono text-white">
+                        {currentRound}<span className="text-xl md:text-3xl text-white/30">/{config.rounds}</span>
+                    </span>
+                 </div>
+
+                 <button onClick={() => changePhase(1)} className="p-3 hover:bg-white/10 rounded-full transition-colors group">
+                    <ChevronRight size={24} className="md:w-8 md:h-8 text-white/50 group-hover:text-white transition-all" />
+                 </button>
+            </div>
+
+            {/* RIGHT: Controls */}
+            <div className="flex items-center justify-end gap-4 md:gap-8">
+                {timerState !== TimerState.FINISHED && (
+                <button 
+                    onClick={toggleTimer}
+                    className="group flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white text-black hover:scale-105 transition-transform shadow-lg shadow-white/10"
+                >
+                    {isRunning ? <Pause size={28} className="md:w-8 md:h-8" fill="black" /> : <Play size={28} className="md:w-8 md:h-8 ml-1" fill="black" />}
+                </button>
+                )}
+                
+                <button 
+                    onClick={resetTimer}
+                    className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all border border-white/10"
+                >
+                    <RotateCcw size={24} className="md:w-8 md:h-8" />
+                </button>
+            </div>
       </div>
 
       {/* Settings Modal */}
@@ -506,11 +505,19 @@ export default function App() {
                 {/* Main Settings */}
                 <div className="space-y-6 mb-8 border-t border-white/10 pt-8">
                     <h3 className="text-sm uppercase tracking-widest text-white/50">Time Configuration</h3>
-                    {isSavedProfile && (
-                        <div className="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded text-blue-200 text-sm">
-                            Editing: <strong>{config.name}</strong>
-                        </div>
-                    )}
+                    
+                    {/* Name Input */}
+                    <div className="mb-6">
+                        <label className="block text-sm text-white/50 mb-2 font-bold uppercase tracking-wider">Profile Name</label>
+                        <input 
+                            type="text" 
+                            value={config.name}
+                            onChange={(e) => setConfig({...config, name: e.target.value})}
+                            className="w-full bg-white/10 border border-white/10 rounded p-3 text-lg font-sans text-white focus:border-white focus:bg-white/20 outline-none transition-all placeholder-white/30"
+                            placeholder="Enter profile name..."
+                        />
+                    </div>
+
                     <div className="grid grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm text-white/50 mb-2 font-bold uppercase tracking-wider">Rounds</label>
