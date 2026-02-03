@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { TimerState, TimerConfig, DEFAULT_CONFIG, ROLL_CONFIG, HIIT_CONFIG, AlertSetting, SoundType } from './types';
 import { audioService } from './services/audioService';
-import { 
-    Play, Pause, RotateCcw, Save, Settings as SettingsIcon, 
-    Image as ImageIcon, Check, ChevronLeft, ChevronRight, 
-    Trash2, Volume2, Vibrate, ChevronDown
+import { useAuth } from './src/contexts/AuthContext';
+import { useProfiles } from './src/hooks/useProfiles';
+import { useLogo } from './src/hooks/useLogo';
+import {
+    Play, Pause, RotateCcw, Save, Settings as SettingsIcon,
+    Image as ImageIcon, Check, ChevronLeft, ChevronRight,
+    Trash2, Volume2, Vibrate, ChevronDown, Cloud, CloudOff,
+    User as UserIcon, LogOut, Mail, Lock, Loader2
 } from 'lucide-react';
 
 // --- Helper to format time MM:SS ---
@@ -70,20 +74,31 @@ const TimeSelect = ({ label, value, onChange }: { label: string, value: number, 
 };
 
 export default function App() {
+  // --- Auth & Data Hooks ---
+  const { user, isLoading: authLoading, isConfigured: firebaseConfigured, signInWithGoogle, signInWithEmail, signUpWithEmail, signOut } = useAuth();
+  const { profiles: savedProfiles, save: saveProfile, remove: removeProfile, isSyncing, isLoading: profilesLoading } = useProfiles();
+  const { logo: customLogo, uploadLogo, isUploading: logoUploading } = useLogo();
+
   // --- State ---
   const [config, setConfig] = useState<TimerConfig>(DEFAULT_CONFIG);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_CONFIG.workDuration);
   const [currentRound, setCurrentRound] = useState(1);
   const [timerState, setTimerState] = useState<TimerState>(TimerState.IDLE);
   const [isRunning, setIsRunning] = useState(false);
-  const [savedProfiles, setSavedProfiles] = useState<TimerConfig[]>([DEFAULT_CONFIG, ROLL_CONFIG, HIIT_CONFIG]);
-  
+
+  // Auth UI State
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authLoading2, setAuthLoading2] = useState(false);
+
   // Clock State
   const [now, setNow] = useState(new Date());
 
   // UI State
   const [showSettings, setShowSettings] = useState(false);
-  const [customLogo, setCustomLogo] = useState<string | null>(null);
 
   // Refs for accurate timing
   const timerRef = useRef<number | null>(null);
@@ -202,7 +217,6 @@ export default function App() {
     setTimerState(TimerState.IDLE);
     setCurrentRound(1);
     setTimeLeft(config.workDuration);
-    setBgImage(null);
   };
 
   // --- Phase Skipping Logic (Smart Navigation) ---
@@ -273,7 +287,7 @@ export default function App() {
   const deleteProfile = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     if (confirm('Delete this profile?')) {
-        setSavedProfiles(prev => prev.filter(p => p.id !== id));
+        removeProfile(id);
         if (config.id === id) {
              setConfig({...DEFAULT_CONFIG}); // Reset to default if deleted active
         }
@@ -287,12 +301,50 @@ export default function App() {
     }
 
     if (isUpdate) {
-        setSavedProfiles(prev => prev.map(p => p.id === config.id ? {...config} : p));
+        saveProfile({...config});
     } else {
         const newProfile = { ...config, id: Date.now().toString() };
-        setSavedProfiles([...savedProfiles, newProfile]);
+        saveProfile(newProfile);
         setConfig(newProfile);
     }
+  };
+
+  // --- Auth Handlers ---
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setAuthLoading2(true);
+
+    try {
+      if (isSignUp) {
+        await signUpWithEmail(email, password);
+      } else {
+        await signInWithEmail(email, password);
+      }
+      setShowEmailForm(false);
+      setEmail('');
+      setPassword('');
+    } catch (error: any) {
+      setAuthError(error.message || 'Authentication failed');
+    } finally {
+      setAuthLoading2(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setAuthError(null);
+    setAuthLoading2(true);
+    try {
+      await signInWithGoogle();
+    } catch (error: any) {
+      setAuthError(error.message || 'Google sign-in failed');
+    } finally {
+      setAuthLoading2(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   const updateAlert = (key: keyof TimerConfig['alerts'], field: 'sound' | 'vibrate', value: any) => {
@@ -308,9 +360,7 @@ export default function App() {
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setCustomLogo(reader.result as string);
-      reader.readAsDataURL(file);
+      uploadLogo(file);
     }
   };
 
@@ -469,7 +519,160 @@ export default function App() {
             <div className="w-full max-w-2xl mx-auto pb-20">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl font-bold font-mono text-white">Timer Setup</h2>
-                    <button onClick={() => setShowSettings(false)} className="text-white/50 hover:text-white">Close</button>
+                    <div className="flex items-center gap-4">
+                        {/* Sync Status Indicator */}
+                        {user && (
+                            <div className="flex items-center gap-2 text-sm">
+                                {isSyncing ? (
+                                    <><Loader2 size={16} className="animate-spin text-blue-400" /><span className="text-blue-400">Syncing...</span></>
+                                ) : (
+                                    <><Cloud size={16} className="text-green-400" /><span className="text-green-400">Synced</span></>
+                                )}
+                            </div>
+                        )}
+                        {!user && firebaseConfigured && (
+                            <div className="flex items-center gap-2 text-sm text-white/50">
+                                <CloudOff size={16} /><span>Local only</span>
+                            </div>
+                        )}
+                        <button onClick={() => setShowSettings(false)} className="text-white/50 hover:text-white">Close</button>
+                    </div>
+                </div>
+
+                {/* Account Section */}
+                <div className="mb-8 p-4 bg-white/5 rounded-lg border border-white/10">
+                    <h3 className="text-sm uppercase tracking-widest text-white/50 mb-4 flex items-center gap-2">
+                        <UserIcon size={16} /> Account
+                    </h3>
+
+                    {authLoading ? (
+                        <div className="flex items-center justify-center py-4">
+                            <Loader2 className="animate-spin" />
+                        </div>
+                    ) : user ? (
+                        // Logged In State
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                {user.photoURL ? (
+                                    <img src={user.photoURL} alt="Avatar" className="w-10 h-10 rounded-full" />
+                                ) : (
+                                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                        <UserIcon size={20} />
+                                    </div>
+                                )}
+                                <div>
+                                    <div className="font-bold">{user.displayName || 'User'}</div>
+                                    <div className="text-sm text-white/50">{user.email}</div>
+                                </div>
+                            </div>
+                            <button
+                                onClick={handleSignOut}
+                                className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition"
+                            >
+                                <LogOut size={16} /> Sign Out
+                            </button>
+                        </div>
+                    ) : firebaseConfigured ? (
+                        // Logged Out State (Firebase configured)
+                        <div className="space-y-4">
+                            {authError && (
+                                <div className="p-3 bg-red-500/20 border border-red-500/50 rounded text-red-300 text-sm">
+                                    {authError}
+                                </div>
+                            )}
+
+                            {!showEmailForm ? (
+                                <div className="flex flex-col gap-3">
+                                    <button
+                                        onClick={handleGoogleSignIn}
+                                        disabled={authLoading2}
+                                        className="flex items-center justify-center gap-3 w-full p-3 bg-white text-black rounded-lg font-bold hover:bg-white/90 transition disabled:opacity-50"
+                                    >
+                                        {authLoading2 ? <Loader2 className="animate-spin" size={20} /> : (
+                                            <>
+                                                <svg viewBox="0 0 24 24" width="20" height="20">
+                                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                                </svg>
+                                                Sign in with Google
+                                            </>
+                                        )}
+                                    </button>
+                                    <button
+                                        onClick={() => setShowEmailForm(true)}
+                                        className="flex items-center justify-center gap-2 w-full p-3 bg-white/10 hover:bg-white/20 rounded-lg transition"
+                                    >
+                                        <Mail size={20} /> Sign in with Email
+                                    </button>
+                                    <p className="text-center text-white/40 text-sm">
+                                        Sign in to sync your profiles across devices
+                                    </p>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleEmailAuth} className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm text-white/50 mb-1">Email</label>
+                                        <div className="relative">
+                                            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+                                            <input
+                                                type="email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className="w-full bg-white/10 border border-white/10 rounded p-3 pl-10 text-white focus:border-white focus:bg-white/20 outline-none transition-all"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-white/50 mb-1">Password</label>
+                                        <div className="relative">
+                                            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+                                            <input
+                                                type="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="w-full bg-white/10 border border-white/10 rounded p-3 pl-10 text-white focus:border-white focus:bg-white/20 outline-none transition-all"
+                                                required
+                                                minLength={6}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <button
+                                            type="submit"
+                                            disabled={authLoading2}
+                                            className="flex-1 flex items-center justify-center gap-2 p-3 bg-green-600 hover:bg-green-500 rounded-lg font-bold transition disabled:opacity-50"
+                                        >
+                                            {authLoading2 ? <Loader2 className="animate-spin" size={20} /> : (isSignUp ? 'Create Account' : 'Sign In')}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => { setShowEmailForm(false); setAuthError(null); }}
+                                            className="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsSignUp(!isSignUp)}
+                                        className="w-full text-center text-white/50 text-sm hover:text-white transition"
+                                    >
+                                        {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+                                    </button>
+                                </form>
+                            )}
+                        </div>
+                    ) : (
+                        // Firebase not configured
+                        <div className="text-center text-white/50 py-4">
+                            <CloudOff size={24} className="mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">Cloud sync not available</p>
+                            <p className="text-xs mt-1">Profiles saved locally in browser</p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Profiles */}
