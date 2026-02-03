@@ -443,7 +443,7 @@ export default function App() {
              transition-all duration-300 ${themeStyles}
         `}>
             {/* TOP SECTION: Logos + Timer using CSS Grid for precise centering */}
-            <div className="flex-1 grid grid-cols-[1fr_auto_1fr] items-center">
+            <div className={`flex-1 grid grid-cols-[1fr_auto_1fr] items-center border-b-4 md:border-b-[6px] transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
                 {/* LEFT: Custom Logo - centered in space between outer border and timer */}
                 <div className="h-full flex items-center justify-center p-2 md:p-4 landscape:p-2">
                     {customLogo ? (
