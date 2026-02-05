@@ -409,11 +409,11 @@ export default function App() {
         clock: 'border-emerald-500/40 text-emerald-400',
       };
       case TimerState.REST: return {
-        pill: 'bg-red-500 text-white',
-        border: 'border-red-500',
-        timer: 'text-red-400',
-        glow: 'shadow-[0_0_80px_rgba(239,68,68,0.12)]',
-        clock: 'border-red-500/40 text-red-400',
+        pill: 'bg-red-600 text-white',
+        border: 'border-red-600',
+        timer: 'text-red-500',
+        glow: 'shadow-[0_0_80px_rgba(220,38,38,0.12)]',
+        clock: 'border-red-600/40 text-red-500',
       };
       case TimerState.WARMUP: return {
         pill: 'bg-amber-500 text-black',
@@ -483,13 +483,15 @@ export default function App() {
                     </div>
                 </div>
 
-                {/* Round indicator — small, clean */}
+                {/* Round indicator — numbers change color with timer */}
                 <div className="font-mono text-white/35 tracking-[0.3em] uppercase mb-1"
                      style={{ fontSize: 'clamp(0.7rem, 2.5vw, 1.2rem)' }}>
-                    {timerState !== TimerState.IDLE && timerState !== TimerState.FINISHED &&
-                      `ROUND ${currentRound} OF ${config.rounds}`
-                    }
-                    {timerState === TimerState.IDLE && `${config.rounds} ROUNDS`}
+                    {timerState !== TimerState.IDLE && timerState !== TimerState.FINISHED && (
+                      <>ROUND <span className={`font-bold transition-colors duration-300 ${style.timer}`}>{currentRound}</span> OF <span className={`font-bold transition-colors duration-300 ${style.timer}`}>{config.rounds}</span></>
+                    )}
+                    {timerState === TimerState.IDLE && (
+                      <><span className={`font-bold transition-colors duration-300 ${style.timer}`}>{config.rounds}</span> ROUNDS</>
+                    )}
                     {timerState === TimerState.FINISHED && 'COMPLETE'}
                 </div>
 
@@ -509,14 +511,14 @@ export default function App() {
                 <div className="flex items-center gap-3 md:gap-5 mt-4 md:mt-6">
                     <button
                         onClick={() => changePhase(-1)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/20"
                     >
                         <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/20"
                     >
                         <SettingsIcon className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
@@ -524,7 +526,7 @@ export default function App() {
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
-                        className={`flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl hover:scale-105 transition-all ${isRunning ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white'}`}
+                        className={`flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl hover:scale-105 transition-all border border-white/20 ${isRunning ? 'bg-red-600 text-white' : 'bg-emerald-500 text-white'}`}
                     >
                         {isRunning
                           ? <Pause className="w-7 h-7 md:w-9 md:h-9" fill="white" />
@@ -535,14 +537,14 @@ export default function App() {
 
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/20"
                     >
                         <RotateCcw className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
                     <button
                         onClick={() => changePhase(1)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/20"
                     >
                         <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
