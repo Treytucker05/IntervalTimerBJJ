@@ -421,6 +421,17 @@ export default function App() {
     }
   };
 
+  // Clock color that matches timer state
+  const getClockColor = () => {
+    switch (timerState) {
+      case TimerState.WORK: return 'border-green-500/50 text-green-500';
+      case TimerState.REST: return 'border-red-600/50 text-red-600';
+      case TimerState.WARMUP: return 'border-blue-500/50 text-blue-500';
+      case TimerState.FINISHED: return 'border-purple-500/50 text-purple-500';
+      default: return 'border-white/20 text-white/50';
+    }
+  };
+
   // Test sound preview
   const playTestSound = (sound: SoundType) => {
     if (sound !== 'none') {
@@ -454,71 +465,33 @@ export default function App() {
              transition-all duration-300 ${themeStyles}
         `}>
             {/* Timer content */}
-            <div className="flex-1 flex flex-col items-center justify-center py-3 md:py-4 landscape:py-1 px-4 md:px-8">
+            <div className="flex-1 flex flex-col items-center justify-center relative py-3 md:py-4 landscape:py-1 px-4 md:px-8">
 
-                {/* PORTRAIT: stacked info above timer */}
-                {!isLandscape && (
-                  <>
-                    {/* Clock */}
-                    <div className="flex items-center gap-2 text-white/40 mb-1">
-                      <span className="font-mono text-sm">
-                        {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                      <span className="text-white/20">|</span>
-                      <span className="font-sans text-sm uppercase tracking-wider">
+                {/* Digital Clock - top left, boxed, color-matched */}
+                <div className={`absolute top-2 left-3 landscape:top-1 landscape:left-2 border-2 rounded-lg px-3 py-1.5 landscape:px-2 landscape:py-1 transition-all duration-300 bg-black/60 ${getClockColor()}`}>
+                    <div className="font-mono font-bold text-base landscape:text-sm tracking-wider leading-none">
+                        {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    </div>
+                    <div className={`font-mono text-[10px] landscape:text-[8px] tracking-wider text-center opacity-60 leading-tight`}>
                         {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
-                      </span>
                     </div>
+                </div>
 
-                    {/* Round Navigation */}
-                    <div className="flex items-center justify-center gap-2 mb-1 md:mb-2">
-                        <button onClick={() => changePhase(-1)} className="p-2 hover:bg-white/10 rounded-lg transition-colors group">
-                            <ChevronLeft size={20} className="md:w-6 md:h-6 text-white/50 group-hover:text-white transition-all" />
-                        </button>
-                        <div className="flex items-center gap-2">
-                            <span className="text-base md:text-xl font-bold text-white/70 uppercase font-sans tracking-wider">Round</span>
-                            <span className="text-2xl md:text-4xl font-bold font-mono text-white">{currentRound}</span>
-                            <span className="text-lg md:text-2xl font-bold font-mono text-white/40">/ {config.rounds}</span>
-                        </div>
-                        <button onClick={() => changePhase(1)} className="p-2 hover:bg-white/10 rounded-lg transition-colors group">
-                            <ChevronRight size={20} className="md:w-6 md:h-6 text-white/50 group-hover:text-white transition-all" />
-                        </button>
-                    </div>
+                {/* Round indicator - above state label, half the timer size */}
+                <div className="font-mono font-bold text-white/60 tracking-wider text-center"
+                     style={{ fontSize: 'clamp(1.5rem, 6vw, 4rem)' }}>
+                    {timerState !== TimerState.IDLE && timerState !== TimerState.FINISHED &&
+                      `ROUND ${currentRound} / ${config.rounds}`
+                    }
+                    {timerState === TimerState.IDLE && `${config.rounds} ROUNDS`}
+                    {timerState === TimerState.FINISHED && 'COMPLETE'}
+                </div>
 
-                    {/* State Label */}
-                    <h2 className="text-xl md:text-3xl font-bold tracking-[0.15em] text-white/80 mb-1">
-                        {getStateLabel()}
-                    </h2>
-
-                    {/* Total Time */}
-                    <div className="text-white/50 text-sm md:text-base font-medium font-sans tracking-wider text-center mb-2">
-                        {timerState === TimerState.IDLE
-                            ? `Total: ${formatTotalTime(config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)}`
-                            : timerState === TimerState.FINISHED
-                                ? 'Great training session!'
-                                : 'Push the Pace'}
-                    </div>
-                  </>
-                )}
-
-                {/* LANDSCAPE: single compact info bar */}
-                {isLandscape && (
-                  <div className="flex items-center justify-center gap-3 mb-0">
-                    <span className="font-mono text-xs text-white/30">
-                      {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                    <span className="text-white/15">|</span>
-                    <button onClick={() => changePhase(-1)} className="p-0.5 hover:bg-white/10 rounded transition-colors group">
-                        <ChevronLeft size={14} className="text-white/40 group-hover:text-white" />
-                    </button>
-                    <span className="text-xs font-bold text-white/50 uppercase font-sans tracking-wider">R{currentRound}/{config.rounds}</span>
-                    <button onClick={() => changePhase(1)} className="p-0.5 hover:bg-white/10 rounded transition-colors group">
-                        <ChevronRight size={14} className="text-white/40 group-hover:text-white" />
-                    </button>
-                    <span className="text-white/15">|</span>
-                    <span className="text-xs font-bold tracking-[0.15em] text-white/60">{getStateLabel()}</span>
-                  </div>
-                )}
+                {/* State Label - BIG and centered */}
+                <h2 className="font-bold tracking-[0.2em] text-white text-center"
+                    style={{ fontSize: 'clamp(2rem, 8vw, 5rem)' }}>
+                    {getStateLabel()}
+                </h2>
 
                 {/* Timer Display - DOMINANT */}
                 <div className={`
@@ -530,15 +503,25 @@ export default function App() {
                     {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                 </div>
 
-                {/* Controls */}
-                <div className="flex items-center justify-center gap-4 md:gap-6 landscape:gap-3 mt-4 md:mt-6 landscape:mt-1">
+                {/* Controls - arrows on outside edges */}
+                <div className="flex items-center justify-center gap-3 md:gap-5 landscape:gap-2 mt-3 md:mt-5 landscape:mt-1">
+                    {/* Skip Back */}
+                    <button
+                        onClick={() => changePhase(-1)}
+                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                    >
+                        <ChevronLeft size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                    </button>
+
+                    {/* Settings */}
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
                         <SettingsIcon size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
                     </button>
 
+                    {/* Play / Pause */}
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
@@ -548,11 +531,20 @@ export default function App() {
                     </button>
                     )}
 
+                    {/* Reset */}
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
                         <RotateCcw size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
+                    </button>
+
+                    {/* Skip Forward */}
+                    <button
+                        onClick={() => changePhase(1)}
+                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                    >
+                        <ChevronRight size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
                     </button>
                 </div>
             </div>
