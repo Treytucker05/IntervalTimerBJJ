@@ -458,6 +458,7 @@ export default function App() {
 
   const isSavedProfile = savedProfiles.some(p => p.id === config.id);
   const style = getStateStyle();
+  const isCompactLandscape = isLandscape && window.innerHeight <= 500;
 
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#0a0a0a] overflow-hidden">
@@ -474,11 +475,11 @@ export default function App() {
             <div className="flex-1 flex flex-col items-center justify-center relative px-4">
 
                 {/* Digital Clock — top left, bigger */}
-                <div className={`absolute top-3 left-4 border-2 rounded-lg px-4 py-2 transition-all duration-500 bg-black/60 backdrop-blur-sm ${style.clock}`}>
-                    <div className="font-mono font-bold text-lg md:text-xl tracking-wider leading-none">
+                <div className={`absolute ${isCompactLandscape ? 'top-2 left-2 px-2.5 py-1.5 rounded-md' : 'top-3 left-4 px-4 py-2 rounded-lg'} border-2 transition-all duration-500 bg-black/60 backdrop-blur-sm ${style.clock}`}>
+                    <div className={`font-mono font-bold tracking-wider leading-none ${isCompactLandscape ? 'text-sm md:text-base' : 'text-lg md:text-xl'}`}>
                         {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </div>
-                    <div className="font-mono text-[10px] md:text-xs tracking-wider text-center opacity-50 mt-0.5">
+                    <div className={`font-mono tracking-wider text-center opacity-50 mt-0.5 ${isCompactLandscape ? 'text-[9px] md:text-[10px]' : 'text-[10px] md:text-xs'}`}>
                         {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
                     </div>
                 </div>
@@ -496,8 +497,8 @@ export default function App() {
                 </div>
 
                 {/* State Label — colored pill for gym visibility */}
-                <div className={`px-6 py-1 md:px-8 md:py-1.5 rounded-full font-bold tracking-[0.25em] uppercase mb-2 transition-all duration-300 ${style.pill}`}
-                     style={{ fontSize: 'clamp(1.2rem, 4vw, 2.5rem)' }}>
+                <div className={`rounded-full font-bold tracking-[0.25em] uppercase mb-2 transition-all duration-300 ${isCompactLandscape ? 'px-4 py-0.5 md:px-6 md:py-1' : 'px-6 py-1 md:px-8 md:py-1.5'} ${style.pill}`}
+                     style={{ fontSize: isCompactLandscape ? 'clamp(1rem, 3vw, 1.6rem)' : 'clamp(1.2rem, 4vw, 2.5rem)' }}>
                     {getStateLabel()}
                 </div>
 
