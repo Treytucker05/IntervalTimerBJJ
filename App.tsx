@@ -398,37 +398,44 @@ export default function App() {
     }
   };
 
-  // --- Styles ---
-  const getThemeStyles = () => {
-    // Returns classes for Border and Text color
+  // --- Unified State Styles ---
+  const getStateStyle = () => {
     switch (timerState) {
-      case TimerState.WORK: return 'border-green-500 text-green-500 shadow-[0_0_40px_rgba(34,197,94,0.15)]';
-      case TimerState.REST: return 'border-red-600 text-red-600 shadow-[0_0_40px_rgba(220,38,38,0.15)]';
-      case TimerState.WARMUP: return 'border-blue-500 text-blue-500';
-      case TimerState.FINISHED: return 'border-purple-500 text-purple-500 animate-pulse';
-      default: return 'border-white/20 text-white';
-    }
-  };
-
-  // Logo border color that matches timer state exactly
-  const getLogoBorderColor = () => {
-    switch (timerState) {
-      case TimerState.WORK: return 'border-green-500 shadow-[0_0_25px_rgba(34,197,94,0.4)]';
-      case TimerState.REST: return 'border-red-600 shadow-[0_0_25px_rgba(220,38,38,0.4)]';
-      case TimerState.WARMUP: return 'border-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.4)]';
-      case TimerState.FINISHED: return 'border-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.4)]';
-      default: return 'border-white/20 shadow-none';
-    }
-  };
-
-  // Clock color that matches timer state
-  const getClockColor = () => {
-    switch (timerState) {
-      case TimerState.WORK: return 'border-green-500/50 text-green-500';
-      case TimerState.REST: return 'border-red-600/50 text-red-600';
-      case TimerState.WARMUP: return 'border-blue-500/50 text-blue-500';
-      case TimerState.FINISHED: return 'border-purple-500/50 text-purple-500';
-      default: return 'border-white/20 text-white/50';
+      case TimerState.WORK: return {
+        pill: 'bg-emerald-500 text-black',
+        border: 'border-emerald-500',
+        timer: 'text-emerald-400',
+        glow: 'shadow-[0_0_80px_rgba(16,185,129,0.12)]',
+        clock: 'border-emerald-500/40 text-emerald-400',
+      };
+      case TimerState.REST: return {
+        pill: 'bg-red-500 text-white',
+        border: 'border-red-500',
+        timer: 'text-red-400',
+        glow: 'shadow-[0_0_80px_rgba(239,68,68,0.12)]',
+        clock: 'border-red-500/40 text-red-400',
+      };
+      case TimerState.WARMUP: return {
+        pill: 'bg-amber-500 text-black',
+        border: 'border-amber-500',
+        timer: 'text-amber-400',
+        glow: 'shadow-[0_0_80px_rgba(245,158,11,0.12)]',
+        clock: 'border-amber-500/40 text-amber-400',
+      };
+      case TimerState.FINISHED: return {
+        pill: 'bg-purple-500 text-white animate-pulse',
+        border: 'border-purple-500',
+        timer: 'text-purple-400',
+        glow: 'shadow-[0_0_80px_rgba(168,85,247,0.15)]',
+        clock: 'border-purple-500/40 text-purple-400',
+      };
+      default: return {
+        pill: 'bg-white/10 text-white/70',
+        border: 'border-white/15',
+        timer: 'text-white',
+        glow: '',
+        clock: 'border-white/15 text-white/40',
+      };
     }
   };
 
@@ -450,101 +457,94 @@ export default function App() {
   };
 
   const isSavedProfile = savedProfiles.some(p => p.id === config.id);
-  const themeStyles = getThemeStyles();
+  const style = getStateStyle();
 
   return (
-    <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
+    <div className="relative h-[100dvh] w-full flex flex-col bg-[#0a0a0a] overflow-hidden">
 
-      {/* MAIN CONTENT AREA - Timer box fills full screen */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-3 md:px-4 landscape:px-3 min-h-0 py-2 landscape:py-1">
+      {/* MAIN CONTENT — timer centered */}
+      <div className="relative z-10 flex-1 flex items-center justify-center w-full px-3 min-h-0 py-2">
 
-        {/* TIMER BOX - Clean single border, no footer */}
+        {/* TIMER BOX */}
         <div className={`
-             relative w-full max-w-5xl h-full landscape:h-full flex
-             border-4 md:border-[6px] landscape:border-3 bg-black/50 rounded-2xl
-             transition-all duration-300 ${themeStyles}
+             relative w-full max-w-5xl h-full flex
+             border-[3px] bg-black/30 rounded-2xl
+             transition-all duration-500 ${style.border} ${style.glow}
         `}>
-            {/* Timer content */}
-            <div className="flex-1 flex flex-col items-center justify-center relative py-3 md:py-4 landscape:py-1 px-4 md:px-8">
+            <div className="flex-1 flex flex-col items-center justify-center relative px-4">
 
-                {/* Digital Clock - top left, boxed, color-matched */}
-                <div className={`absolute top-2 left-3 landscape:top-1 landscape:left-2 border-2 rounded-lg px-3 py-1.5 landscape:px-2 landscape:py-1 transition-all duration-300 bg-black/60 ${getClockColor()}`}>
-                    <div className="font-mono font-bold text-base landscape:text-sm tracking-wider leading-none">
+                {/* Digital Clock — top left, bigger */}
+                <div className={`absolute top-3 left-4 border-2 rounded-lg px-4 py-2 transition-all duration-500 bg-black/60 backdrop-blur-sm ${style.clock}`}>
+                    <div className="font-mono font-bold text-lg md:text-xl tracking-wider leading-none">
                         {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </div>
-                    <div className={`font-mono text-[10px] landscape:text-[8px] tracking-wider text-center opacity-60 leading-tight`}>
+                    <div className="font-mono text-[10px] md:text-xs tracking-wider text-center opacity-50 mt-0.5">
                         {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
                     </div>
                 </div>
 
-                {/* Round indicator - above state label, half the timer size */}
-                <div className="font-mono font-bold text-white/60 tracking-wider text-center"
-                     style={{ fontSize: 'clamp(1.5rem, 6vw, 4rem)' }}>
+                {/* Round indicator — small, clean */}
+                <div className="font-mono text-white/35 tracking-[0.3em] uppercase mb-1"
+                     style={{ fontSize: 'clamp(0.7rem, 2.5vw, 1.2rem)' }}>
                     {timerState !== TimerState.IDLE && timerState !== TimerState.FINISHED &&
-                      `ROUND ${currentRound} / ${config.rounds}`
+                      `ROUND ${currentRound} OF ${config.rounds}`
                     }
                     {timerState === TimerState.IDLE && `${config.rounds} ROUNDS`}
                     {timerState === TimerState.FINISHED && 'COMPLETE'}
                 </div>
 
-                {/* State Label - BIG and centered */}
-                <h2 className="font-bold tracking-[0.2em] text-white text-center"
-                    style={{ fontSize: 'clamp(2rem, 8vw, 5rem)' }}>
+                {/* State Label — colored pill for gym visibility */}
+                <div className={`px-6 py-1 md:px-8 md:py-1.5 rounded-full font-bold tracking-[0.25em] uppercase mb-2 transition-all duration-300 ${style.pill}`}
+                     style={{ fontSize: 'clamp(1.2rem, 4vw, 2.5rem)' }}>
                     {getStateLabel()}
-                </h2>
+                </div>
 
-                {/* Timer Display - DOMINANT */}
-                <div className={`
-                    font-mono leading-none tracking-tight tabular-nums text-center
-                    ${timerState === TimerState.FINISHED
-                      ? 'text-[16vw] md:text-[14rem] landscape:text-[28vh]'
-                      : 'text-[clamp(7rem,30vw,40vh)] landscape:text-[clamp(8rem,38vh,50vh)]'}
-                `}>
+                {/* Timer — DOMINANT CENTER */}
+                <div className={`font-mono leading-[0.85] tracking-tight tabular-nums transition-colors duration-500 ${style.timer}`}
+                     style={{ fontSize: 'clamp(5rem, min(30vw, 45vh), 24rem)' }}>
                     {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                 </div>
 
-                {/* Controls - arrows on outside edges */}
-                <div className="flex items-center justify-center gap-3 md:gap-5 landscape:gap-2 mt-3 md:mt-5 landscape:mt-1">
-                    {/* Skip Back */}
+                {/* Controls */}
+                <div className="flex items-center gap-3 md:gap-5 mt-4 md:mt-6">
                     <button
                         onClick={() => changePhase(-1)}
-                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
-                        <ChevronLeft size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                        <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
-                    {/* Settings */}
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
-                        <SettingsIcon size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
+                        <SettingsIcon className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
-                    {/* Play / Pause */}
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
-                        className={`flex items-center justify-center w-14 h-14 md:w-20 md:h-20 landscape:w-10 landscape:h-10 rounded-xl hover:scale-105 transition-transform ${isRunning ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+                        className={`flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl hover:scale-105 transition-all ${isRunning ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white'}`}
                     >
-                        {isRunning ? <Pause size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" fill="white" /> : <Play size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 ml-0.5" fill="white" />}
+                        {isRunning
+                          ? <Pause className="w-7 h-7 md:w-9 md:h-9" fill="white" />
+                          : <Play className="w-7 h-7 md:w-9 md:h-9 ml-0.5" fill="white" />
+                        }
                     </button>
                     )}
 
-                    {/* Reset */}
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
-                        <RotateCcw size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
+                        <RotateCcw className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
-                    {/* Skip Forward */}
                     <button
                         onClick={() => changePhase(1)}
-                        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
-                        <ChevronRight size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4" />
+                        <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                 </div>
             </div>
