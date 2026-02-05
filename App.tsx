@@ -402,7 +402,7 @@ export default function App() {
   const getStateStyle = () => {
     switch (timerState) {
       case TimerState.WORK: return {
-        pill: 'bg-emerald-500 text-black',
+        pill: `bg-emerald-500 ${isLandscape ? 'text-white' : 'text-black'}`,
         border: 'border-emerald-500',
         timer: 'text-emerald-400',
         glow: 'shadow-[0_0_80px_rgba(16,185,129,0.12)]',
