@@ -48,7 +48,7 @@ const TimeSelect = ({ label, value, onChange }: { label: string, value: number, 
 
   return (
     <div>
-      <label className="block text-sm text-white/50 mb-2 font-bold uppercase tracking-wider">{label}</label>
+      <label className="block text-xs text-white/50 mb-1.5 font-bold uppercase tracking-wider">{label}</label>
       <div className="flex gap-2 items-center">
         {/* Minutes Dropdown */}
         <div className="flex-1 relative group">
@@ -444,28 +444,7 @@ export default function App() {
   return (
     <div className="relative h-[100dvh] w-full flex flex-col bg-[#121212] overflow-hidden">
 
-      {/* Header - VOW BJJ banner with clock overlay - fluid responsive height */}
-      <div
-        className="relative w-full z-30 shrink-0"
-        style={{
-          height: 'clamp(48px, 10vw, 100px)',
-          backgroundImage: `url(${import.meta.env.BASE_URL}vow-header.png)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/* CENTER: Clock overlay - time stacked over date */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center leading-tight">
-          <span className="font-mono font-bold text-white tracking-wide" style={{ fontSize: 'clamp(36px, 7vw, 72px)' }}>
-            {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </span>
-          <span className="font-sans text-white/60 uppercase tracking-widest" style={{ fontSize: 'clamp(14px, 2.5vw, 24px)' }}>
-            {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
-          </span>
-        </div>
-      </div>
-
-      {/* MAIN CONTENT AREA - Timer box fills remaining space */}
+      {/* MAIN CONTENT AREA - Timer box fills full screen */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-3 md:px-4 landscape:px-3 min-h-0 py-2 landscape:py-1">
 
         {/* TIMER BOX - Clean single border, no footer */}
@@ -474,71 +453,88 @@ export default function App() {
              border-4 md:border-[6px] landscape:border-3 bg-black/50 rounded-2xl
              transition-all duration-300 ${themeStyles}
         `}>
-            {/* LEFT: Custom Logo (conditionally shown) */}
-            {showLogos && isLandscape && (
-                <div className={`h-full flex items-center justify-center p-3 md:p-4 border-r-2 md:border-r-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
-                    {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] w-16 md:w-28 object-contain border-2 rounded-lg transition-all duration-300 ${getLogoBorderColor()}`} />
-                    ) : (
-                        <div className={`w-16 md:w-24 aspect-square border-2 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-xs md:text-base text-center text-white/40 font-medium font-sans">LOGO</span>
-                        </div>
-                    )}
-                </div>
-            )}
+            {/* Timer content */}
+            <div className="flex-1 flex flex-col items-center justify-center py-3 md:py-4 landscape:py-1 px-4 md:px-8">
 
-            {/* CENTER: Timer content - All stacked vertically */}
-            <div className="flex-1 flex flex-col items-center justify-center py-3 md:py-4 landscape:py-2 px-4 md:px-8">
-                {/* Round Navigation - NOW AT TOP */}
-                <div className="flex items-center justify-center gap-2 landscape:gap-1 mb-2 md:mb-3">
-                    <button onClick={() => changePhase(-1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-lg transition-colors group">
-                        <ChevronLeft size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white/50 group-hover:text-white transition-all" />
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                        <span className="text-base md:text-xl landscape:text-sm font-bold text-white/70 uppercase font-sans tracking-wider">
-                            Round
-                        </span>
-                        <span className="text-2xl md:text-4xl landscape:text-xl font-bold font-mono text-white">
-                            {currentRound}
-                        </span>
-                        <span className="text-lg md:text-2xl landscape:text-base font-bold font-mono text-white/40">
-                            / {config.rounds}
-                        </span>
+                {/* PORTRAIT: stacked info above timer */}
+                {!isLandscape && (
+                  <>
+                    {/* Clock */}
+                    <div className="flex items-center gap-2 text-white/40 mb-1">
+                      <span className="font-mono text-sm">
+                        {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      <span className="text-white/20">|</span>
+                      <span className="font-sans text-sm uppercase tracking-wider">
+                        {now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+                      </span>
                     </div>
 
-                    <button onClick={() => changePhase(1)} className="p-2 landscape:p-1 hover:bg-white/10 rounded-lg transition-colors group">
-                        <ChevronRight size={20} className="md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white/50 group-hover:text-white transition-all" />
+                    {/* Round Navigation */}
+                    <div className="flex items-center justify-center gap-2 mb-1 md:mb-2">
+                        <button onClick={() => changePhase(-1)} className="p-2 hover:bg-white/10 rounded-lg transition-colors group">
+                            <ChevronLeft size={20} className="md:w-6 md:h-6 text-white/50 group-hover:text-white transition-all" />
+                        </button>
+                        <div className="flex items-center gap-2">
+                            <span className="text-base md:text-xl font-bold text-white/70 uppercase font-sans tracking-wider">Round</span>
+                            <span className="text-2xl md:text-4xl font-bold font-mono text-white">{currentRound}</span>
+                            <span className="text-lg md:text-2xl font-bold font-mono text-white/40">/ {config.rounds}</span>
+                        </div>
+                        <button onClick={() => changePhase(1)} className="p-2 hover:bg-white/10 rounded-lg transition-colors group">
+                            <ChevronRight size={20} className="md:w-6 md:h-6 text-white/50 group-hover:text-white transition-all" />
+                        </button>
+                    </div>
+
+                    {/* State Label */}
+                    <h2 className="text-xl md:text-3xl font-bold tracking-[0.15em] text-white/80 mb-1">
+                        {getStateLabel()}
+                    </h2>
+
+                    {/* Total Time */}
+                    <div className="text-white/50 text-sm md:text-base font-medium font-sans tracking-wider text-center mb-2">
+                        {timerState === TimerState.IDLE
+                            ? `Total: ${formatTotalTime(config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)}`
+                            : timerState === TimerState.FINISHED
+                                ? 'Great training session!'
+                                : 'Push the Pace'}
+                    </div>
+                  </>
+                )}
+
+                {/* LANDSCAPE: single compact info bar */}
+                {isLandscape && (
+                  <div className="flex items-center justify-center gap-3 mb-0">
+                    <span className="font-mono text-xs text-white/30">
+                      {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <span className="text-white/15">|</span>
+                    <button onClick={() => changePhase(-1)} className="p-0.5 hover:bg-white/10 rounded transition-colors group">
+                        <ChevronLeft size={14} className="text-white/40 group-hover:text-white" />
                     </button>
-                </div>
-
-                {/* State Label */}
-                <h2 className="text-xl md:text-3xl landscape:text-base font-bold tracking-[0.15em] text-white/80 mb-1">
-                    {getStateLabel()}
-                </h2>
-
-                {/* Total Time - Below state label, formatted as Minutes/Seconds */}
-                <div className="text-white/50 text-sm md:text-base landscape:text-xs font-medium font-sans tracking-wider text-center mb-2">
-                    {timerState === TimerState.IDLE
-                        ? `Total: ${formatTotalTime(config.rounds * (config.workDuration + config.restDuration) + config.warmupDuration)}`
-                        : timerState === TimerState.FINISHED
-                            ? 'Great training session!'
-                            : 'Push the Pace'}
-                </div>
+                    <span className="text-xs font-bold text-white/50 uppercase font-sans tracking-wider">R{currentRound}/{config.rounds}</span>
+                    <button onClick={() => changePhase(1)} className="p-0.5 hover:bg-white/10 rounded transition-colors group">
+                        <ChevronRight size={14} className="text-white/40 group-hover:text-white" />
+                    </button>
+                    <span className="text-white/15">|</span>
+                    <span className="text-xs font-bold tracking-[0.15em] text-white/60">{getStateLabel()}</span>
+                  </div>
+                )}
 
                 {/* Timer Display - DOMINANT */}
                 <div className={`
                     font-mono leading-none tracking-tight tabular-nums text-center
-                    ${timerState === TimerState.FINISHED ? 'text-[14vw] md:text-[12rem] landscape:text-[18vh]' : 'text-[clamp(5rem,24vw,32vh)] landscape:text-[clamp(4rem,20vh,28vh)]'}
+                    ${timerState === TimerState.FINISHED
+                      ? 'text-[16vw] md:text-[14rem] landscape:text-[28vh]'
+                      : 'text-[clamp(7rem,30vw,40vh)] landscape:text-[clamp(8rem,38vh,50vh)]'}
                 `}>
                     {timerState === TimerState.FINISHED ? 'OSS!' : formatTime(timeLeft)}
                 </div>
 
-                {/* Controls - NOW BELOW TIMER */}
-                <div className="flex items-center justify-center gap-4 md:gap-6 landscape:gap-3 mt-4 md:mt-6 landscape:mt-3">
+                {/* Controls */}
+                <div className="flex items-center justify-center gap-4 md:gap-6 landscape:gap-3 mt-4 md:mt-6 landscape:mt-1">
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-9 landscape:h-9 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
                         <SettingsIcon size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
                     </button>
@@ -546,7 +542,7 @@ export default function App() {
                     {timerState !== TimerState.FINISHED && (
                     <button
                         onClick={toggleTimer}
-                        className={`flex items-center justify-center w-14 h-14 md:w-20 md:h-20 landscape:w-11 landscape:h-11 rounded-xl hover:scale-105 transition-transform ${isRunning ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+                        className={`flex items-center justify-center w-14 h-14 md:w-20 md:h-20 landscape:w-10 landscape:h-10 rounded-xl hover:scale-105 transition-transform ${isRunning ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
                     >
                         {isRunning ? <Pause size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5" fill="white" /> : <Play size={24} className="md:w-8 md:h-8 landscape:w-5 landscape:h-5 ml-0.5" fill="white" />}
                     </button>
@@ -554,59 +550,46 @@ export default function App() {
 
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-9 landscape:h-9 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 landscape:w-8 landscape:h-8 rounded-xl bg-white/5 text-white/70 hover:bg-white/15 hover:text-white transition-all border border-white/10"
                     >
                         <RotateCcw size={18} className="md:w-5 md:h-5 landscape:w-4 landscape:h-4" />
                     </button>
                 </div>
             </div>
-
-            {/* RIGHT: Custom Logo (conditionally shown) */}
-            {showLogos && isLandscape && (
-                <div className={`h-full flex items-center justify-center p-3 md:p-4 border-l-2 md:border-l-4 transition-all duration-300 ${getLogoBorderColor().split(' ')[0]}`}>
-                    {customLogo ? (
-                        <img src={customLogo} alt="Custom Logo" className={`max-h-[60%] w-16 md:w-28 object-contain border-2 rounded-lg transition-all duration-300 scale-x-[-1] ${getLogoBorderColor()}`} />
-                    ) : (
-                        <div className={`w-16 md:w-24 aspect-square border-2 flex items-center justify-center rounded-lg bg-black/40 transition-all duration-300 ${getLogoBorderColor()}`}>
-                           <span className="text-xs md:text-base text-center text-white/40 font-medium font-sans">LOGO</span>
-                        </div>
-                    )}
-                </div>
-            )}
         </div>
 
       </div>
 
       {/* Settings Modal */}
       {showSettings && (
-        <div className="absolute inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col p-6 overflow-y-auto">
-            <div className="w-full max-w-2xl mx-auto pb-20">
-                <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl font-bold font-mono text-white">Timer Setup</h2>
-                    <div className="flex items-center gap-4">
-                        {/* Sync Status Indicator */}
+        <div className="absolute inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col">
+            <div className="w-full max-w-lg mx-auto pb-20 px-4 pt-4 settings-scroll flex-1 min-h-0">
+                {/* Sticky header */}
+                <div className="flex justify-between items-center mb-6 sticky top-0 bg-black/95 backdrop-blur-xl py-2 -mx-4 px-4 z-10">
+                    <h2 className="text-2xl font-bold font-mono text-white">Setup</h2>
+                    <div className="flex items-center gap-3">
                         {user && (
-                            <div className="flex items-center gap-2 text-sm">
+                            <div className="flex items-center gap-1.5 text-xs">
                                 {isSyncing ? (
-                                    <><Loader2 size={16} className="animate-spin text-blue-400" /><span className="text-blue-400">Syncing...</span></>
+                                    <><Loader2 size={14} className="animate-spin text-blue-400" /><span className="text-blue-400">Syncing</span></>
                                 ) : (
-                                    <><Cloud size={16} className="text-green-400" /><span className="text-green-400">Synced</span></>
+                                    <><Cloud size={14} className="text-green-400" /><span className="text-green-400">Synced</span></>
                                 )}
                             </div>
                         )}
                         {!user && firebaseConfigured && (
-                            <div className="flex items-center gap-2 text-sm text-white/50">
-                                <CloudOff size={16} /><span>Local only</span>
+                            <div className="flex items-center gap-1.5 text-xs text-white/50">
+                                <CloudOff size={14} /><span>Local</span>
                             </div>
                         )}
-                        <button onClick={() => setShowSettings(false)} className="text-white/50 hover:text-white">Close</button>
+                        <button onClick={() => setShowSettings(false)} className="px-3 py-1.5 text-sm bg-white/10 hover:bg-white/20 rounded-lg text-white/70 hover:text-white transition">Done</button>
                     </div>
                 </div>
 
                 {/* Account Section */}
-                <div className="mb-8 p-4 bg-white/5 rounded-lg border border-white/10">
-                    <h3 className="text-sm uppercase tracking-widest text-white/50 mb-4 flex items-center gap-2">
-                        <UserIcon size={16} /> Account
+                <div className="mb-6 p-3 bg-white/5 rounded-lg border border-white/10">
+                    <h3 className="text-xs uppercase tracking-widest text-white/50 mb-3 flex items-center gap-2">
+                        <UserIcon size={14} /> Account
                     </h3>
 
                     {authLoading ? (
@@ -740,9 +723,9 @@ export default function App() {
                 </div>
 
                 {/* Profiles */}
-                <div className="mb-8">
-                    <h3 className="text-sm uppercase tracking-widest text-white/50 mb-4">Saved Profiles</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="mb-6">
+                    <h3 className="text-xs uppercase tracking-widest text-white/50 mb-3">Saved Profiles</h3>
+                    <div className="grid grid-cols-1 gap-2">
                         {savedProfiles.map(p => (
                             <div 
                                 key={p.id}
@@ -765,12 +748,12 @@ export default function App() {
                 </div>
 
                 {/* Main Settings */}
-                <div className="space-y-6 mb-8 border-t border-white/10 pt-8">
-                    <h3 className="text-sm uppercase tracking-widest text-white/50">Time Configuration</h3>
-                    
+                <div className="space-y-4 mb-6 border-t border-white/10 pt-6">
+                    <h3 className="text-xs uppercase tracking-widest text-white/50">Time Configuration</h3>
+
                     {/* Name Input */}
-                    <div className="mb-6">
-                        <label className="block text-sm text-white/50 mb-2 font-bold uppercase tracking-wider">Profile Name</label>
+                    <div className="mb-4">
+                        <label className="block text-xs text-white/50 mb-1.5 font-bold uppercase tracking-wider">Profile Name</label>
                         <input 
                             type="text" 
                             value={config.name}
@@ -780,9 +763,9 @@ export default function App() {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm text-white/50 mb-2 font-bold uppercase tracking-wider">Rounds</label>
+                            <label className="block text-xs text-white/50 mb-1.5 font-bold uppercase tracking-wider">Rounds</label>
                             <input 
                                 type="number" 
                                 value={config.rounds}
@@ -796,8 +779,8 @@ export default function App() {
                             onChange={(val) => setConfig({...config, warmupDuration: val})}
                         />
                     </div>
-                    <div className="grid grid-cols-2 gap-6">
-                        <TimeSelect 
+                    <div className="grid grid-cols-2 gap-4">
+                        <TimeSelect
                             label="Work Time"
                             value={config.workDuration}
                             onChange={(val) => setConfig({...config, workDuration: val})}
@@ -810,12 +793,12 @@ export default function App() {
                     </div>
 
                      {/* Alerts Configuration */}
-                     <div className="pt-6 border-t border-white/10">
-                        <h3 className="text-sm uppercase tracking-widest text-white/50 mb-4 flex items-center gap-2">
+                     <div className="pt-4 border-t border-white/10">
+                        <h3 className="text-xs uppercase tracking-widest text-white/50 mb-3 flex items-center gap-2">
                              Alerts & Feedback
                         </h3>
-                        
-                        <div className="flex items-center gap-4 mb-6">
+
+                        <div className="flex items-center gap-3 mb-4">
                             <Volume2 size={20} className="text-white/70" />
                             <input 
                                 type="range" min="0" max="1" step="0.1" 
@@ -890,9 +873,9 @@ export default function App() {
                 </div>
 
                 {/* Branding */}
-                <div className="border-t border-white/10 pt-8 space-y-6">
+                <div className="border-t border-white/10 pt-6 space-y-4">
                     <div>
-                        <h3 className="text-sm uppercase tracking-widest text-white/50 mb-4">Branding</h3>
+                        <h3 className="text-xs uppercase tracking-widest text-white/50 mb-3">Branding</h3>
                         <div className="flex flex-col gap-4">
                             {/* Show/Hide Logos Toggle */}
                             <button
