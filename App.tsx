@@ -512,14 +512,14 @@ export default function App() {
                 <div className="flex items-center gap-3 md:gap-5 mt-4 md:mt-6">
                     <button
                         onClick={() => changePhase(-1)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/20"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white hover:bg-white/15 transition-all border border-white"
                     >
                         <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/50 hover:bg-white/15 hover:text-white transition-all border border-white/20"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white hover:bg-white/15 transition-all border border-white"
                     >
                         <SettingsIcon className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
@@ -545,7 +545,7 @@ export default function App() {
 
                     <button
                         onClick={() => changePhase(1)}
-                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white/40 hover:bg-white/15 hover:text-white transition-all border border-white/20"
+                        className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-xl bg-white/5 text-white hover:bg-white/15 transition-all border border-white"
                     >
                         <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
